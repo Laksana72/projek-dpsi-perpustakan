@@ -1,0 +1,62 @@
+@utility animate-fade-in {
+    animation: fade-in var(--transition-normal) ease-out;
+}
+
+@utility animate-fade-out {
+    animation: fade-out var(--transition-fast) ease-in;
+}
+
+@utility animate-slide-up {
+    animation: slide-up var(--transition-slow) ease-out;
+}
+
+@utility animate-slide-down {
+    animation: slide-down var(--transition-slow) ease-out;
+}
+
+@utility animate-slide-left {
+    animation: slide-left var(--transition-slow) ease-out;
+}
+
+@utility animate-slide-right {
+    animation: slide-right var(--transition-slow) ease-out;
+}
+
+@utility animate-scale-in {
+    animation: scale-in var(--transition-normal) ease-out;
+}
+
+@utility animate-scale-out {
+    animation: scale-out var(--transition-fast) ease-in;
+}
+
+@utility animate-pulse-soft {
+    animation: pulse-soft 2000ms ease-in-out infinite;
+}
+
+@utility animate-shimmer {
+    background: linear-gradient(
+        90deg,
+        var(--color-gray-100) 25%,
+        var(--color-gray-200) 50%,
+        var(--color-gray-100) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1500ms ease-in-out infinite;
+}
+
+@utility transition-hover {
+    transition: all var(--transition-fast);
+}
+
+@utility transition-card {
+    transition: all var(--transition-fast);
+}
+
+@utility transition-sidebar {
+    transition: all var(--transition-slow);
+}
+
+@utility transition-modal {
+    transition: all var(--transition-normal);
+}

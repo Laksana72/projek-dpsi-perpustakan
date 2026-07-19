@@ -1,0 +1,1 @@
+import{k as r}from"./index-D7dOofDe.js";function a(n){const t=n.borrowing,o=t==null?void 0:t.book;return{id:String(n.id),borrowingId:String(n.borrowing_id),bookTitle:(o==null?void 0:o.title)??"",amount:n.amount,status:n.status,dueDate:n.due_date}}async function e(){return(await r.get("/fines?per_page=100")).data.map(a)}export{e as g};

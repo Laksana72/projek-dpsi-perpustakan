@@ -1,0 +1,10 @@
+@theme {
+    --z-dropdown: 60;
+    --z-sticky: 50;
+    --z-fixed: 40;
+    --z-modal-backdrop: 90;
+    --z-modal: 100;
+    --z-popover: 70;
+    --z-tooltip: 80;
+    --z-toast: 110;
+}

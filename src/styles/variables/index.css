@@ -1,0 +1,22 @@
+:root {
+    --header-height: 72px;
+    --sidebar-width: 260px;
+    --sidebar-width-collapsed: 72px;
+    --content-max-width: 1440px;
+    --content-padding: 32px;
+    --content-gap: 24px;
+    --card-padding: 24px;
+    --input-height: 48px;
+    --button-height: 48px;
+    --avatar-size: 40px;
+    --avatar-size-lg: 48px;
+    --icon-size-sm: 16px;
+    --icon-size-md: 20px;
+    --icon-size-lg: 24px;
+    --icon-size-xl: 32px;
+    --sidebar-menu-height: 48px;
+    --sidebar-menu-gap: 8px;
+    --transition-fast: 200ms;
+    --transition-normal: 250ms;
+    --transition-slow: 300ms;
+}

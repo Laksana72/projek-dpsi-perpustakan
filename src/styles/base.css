@@ -1,0 +1,104 @@
+@layer base {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        font-family: var(--font-family-sans);
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
+        line-height: var(--leading-normal);
+    }
+
+    h1 {
+        font-size: var(--text-h1);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--leading-tight);
+    }
+
+    h2 {
+        font-size: var(--text-h2);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--leading-tight);
+    }
+
+    h3 {
+        font-size: var(--text-h3);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--leading-tight);
+    }
+
+    h4 {
+        font-size: var(--text-h4);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--leading-tight);
+    }
+
+    h5 {
+        font-size: var(--text-h5);
+        font-weight: var(--font-weight-medium);
+        line-height: var(--leading-tight);
+    }
+
+    a {
+        color: var(--color-primary);
+        text-decoration: none;
+        transition: color var(--transition-fast);
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    button {
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-family: inherit;
+        font-size: inherit;
+    }
+
+    input,
+    textarea,
+    select {
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+    }
+
+    ul,
+    ol {
+        list-style: none;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}

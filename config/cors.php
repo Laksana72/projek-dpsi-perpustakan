@@ -4,7 +4,9 @@ return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
     'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:5173'),
         'https://projek-dpsi-perpustakan.vercel.app',
+        'https://projek-dpsi-perpustakan-14w34stah-tcsg.vercel.app',
     ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ChevronDown, ChevronUp, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronUp, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { getAllBooks, getBookById } from '@/services/book.service'
 import { createBorrowing } from '@/services/borrowing.service'
 import { useAuth } from '@/hooks/useAuth'

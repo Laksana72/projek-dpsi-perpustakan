@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["nodejs_latest"]
+nixPkgs = ["php84", "php84.pdo", "php84.mbstring", "php84.pdo_mysql", "php84.tokenizer", "php84.xml", "php84.ctype", "php84.json", "php84.curl", "php84.fileinfo", "php84.bcmath", "php84.gd", "nodejs_latest"]
 
 [phases.install]
 cmds = ["composer install --no-dev --optimize-autoloader"]

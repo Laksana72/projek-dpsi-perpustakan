@@ -11,6 +11,7 @@ import {
 import { getAllHistory } from '@/services/history.service'
 import { getAllBooks } from '@/services/book.service'
 import type { History, Book } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
 import Select from '@/components/forms/Select'
 import Badge from '@/components/ui/Badge'
@@ -382,7 +383,7 @@ function HistoryPage() {
                                                         className="h-full w-full object-cover"
                                                     />
                                                 ) : (
-                                                    <BookOpen className="h-full w-full p-1 text-disabled" />
+                                                    <BookCoverPlaceholder title={h.bookTitle} className="h-full w-full rounded" />
                                                 )}
                                             </div>
                                         </td>
@@ -436,7 +437,7 @@ function HistoryPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <BookOpen className="h-full w-full p-2 text-disabled" />
+                                            <BookCoverPlaceholder title={h.bookTitle} className="h-full w-full rounded-lg" />
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">

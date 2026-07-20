@@ -12,6 +12,7 @@ import {
 import { getAllBooks, createBook, updateBook, deleteBook } from '@/services/book.service'
 import { getAllCategories } from '@/services/category.service'
 import type { Book } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
 import Select from '@/components/forms/Select'
 import Input from '@/components/forms/Input'
@@ -382,7 +383,7 @@ function BookManagementPage() {
                                             {(safePage - 1) * ITEMS_PER_PAGE + idx + 1}
                                         </td>
                                         <td className="px-3 py-3">
-                                            <div className="h-12 w-9 overflow-hidden rounded bg-gray-100">
+                                            <div className="h-12 w-9 overflow-hidden rounded">
                                                 {book.cover ? (
                                                     <img
                                                         src={book.cover}
@@ -390,7 +391,7 @@ function BookManagementPage() {
                                                         className="h-full w-full object-cover"
                                                     />
                                                 ) : (
-                                                    <BookX className="h-full w-full p-1 text-disabled" />
+                                                    <BookCoverPlaceholder title={book.title} className="h-full w-full" />
                                                 )}
                                             </div>
                                         </td>
@@ -447,7 +448,7 @@ function BookManagementPage() {
                                 className="rounded-[16px] border border-border bg-white p-4 shadow-card"
                             >
                                 <div className="mb-3 flex items-start gap-3">
-                                    <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                                    <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg">
                                         {book.cover ? (
                                             <img
                                                 src={book.cover}
@@ -455,7 +456,7 @@ function BookManagementPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <BookX className="h-full w-full p-2 text-disabled" />
+                                            <BookCoverPlaceholder title={book.title} className="h-full w-full" />
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">

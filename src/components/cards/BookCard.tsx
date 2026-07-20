@@ -1,6 +1,6 @@
-import { BookOpen } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import { cn } from '@/utils/cn'
 
 interface BookCardProps {
@@ -36,7 +36,7 @@ function BookCard({ cover, title, author, category, year, status, onDetail, clas
                 className,
             )}
         >
-            <div className="mb-4 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[12px] bg-gray-100">
+            <div className="mb-4 aspect-[3/4] overflow-hidden rounded-[12px]">
                 {cover ? (
                     <img
                         src={cover}
@@ -44,7 +44,7 @@ function BookCard({ cover, title, author, category, year, status, onDetail, clas
                         className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
                     />
                 ) : (
-                    <BookOpen className="h-12 w-12 text-disabled" />
+                    <BookCoverPlaceholder title={title} className="h-full w-full" />
                 )}
             </div>
             <h5 className="mb-1 text-sm font-semibold text-text-primary line-clamp-2">{title}</h5>

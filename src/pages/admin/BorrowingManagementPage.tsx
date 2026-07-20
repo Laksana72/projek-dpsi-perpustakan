@@ -8,10 +8,10 @@ import {
     RotateCcw,
     Check,
     X,
-    BookX,
 } from 'lucide-react'
 import { getAllBorrowings, approveBorrowing, rejectBorrowing } from '@/services/borrowing.service'
 import type { Borrowing } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
 import Select from '@/components/forms/Select'
 import Badge from '@/components/ui/Badge'
@@ -397,7 +397,7 @@ function BorrowingManagementPage() {
                                 className="rounded-[16px] border border-border bg-white p-4 shadow-card"
                             >
                                 <div className="mb-3 flex items-start gap-3">
-                                    <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                                    <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg">
                                         {b.bookCover ? (
                                             <img
                                                 src={b.bookCover}
@@ -405,7 +405,7 @@ function BorrowingManagementPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <BookX className="h-full w-full p-2 text-disabled" />
+                                            <BookCoverPlaceholder title={b.bookTitle} className="h-full w-full" />
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">
@@ -483,7 +483,7 @@ function BorrowingManagementPage() {
                 {detailBorrowing && (
                     <div className="space-y-4">
                         <div className="flex gap-4">
-                            <div className="h-24 w-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                            <div className="h-24 w-16 shrink-0 overflow-hidden rounded-lg">
                                 {detailBorrowing.bookCover ? (
                                     <img
                                         src={detailBorrowing.bookCover}
@@ -491,7 +491,7 @@ function BorrowingManagementPage() {
                                         className="h-full w-full object-cover"
                                     />
                                 ) : (
-                                    <BookX className="h-full w-full p-2 text-disabled" />
+                                    <BookCoverPlaceholder title={detailBorrowing.bookTitle} className="h-full w-full" />
                                 )}
                             </div>
                             <div>

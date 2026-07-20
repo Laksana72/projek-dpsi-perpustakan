@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronUp, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { ChevronDown, ChevronUp, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { getAllBooks, getBookById } from '@/services/book.service'
 import { createBorrowing } from '@/services/borrowing.service'
 import { useAuth } from '@/hooks/useAuth'
 import type { Book } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import Breadcrumb from '@/components/navigation/Breadcrumb'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
@@ -117,7 +118,7 @@ function DetailBookPage() {
 
             <div className="mb-10 grid gap-8 lg:grid-cols-[300px_1fr] xl:gap-12">
                 <div className="flex justify-center lg:justify-start">
-                    <div className="h-[420px] w-[300px] overflow-hidden rounded-[16px] bg-gray-100 shadow-md">
+                    <div className="h-[420px] w-[300px] overflow-hidden rounded-[16px] shadow-md">
                         {book.cover ? (
                             <img
                                 src={book.cover}
@@ -125,9 +126,7 @@ function DetailBookPage() {
                                 className="h-full w-full object-cover transition-transform duration-200 hover:scale-105"
                             />
                         ) : (
-                            <div className="flex h-full w-full items-center justify-center">
-                                <BookOpen className="h-20 w-20 text-disabled" />
-                            </div>
+                            <BookCoverPlaceholder title={book.title} className="h-full w-full" />
                         )}
                     </div>
                 </div>

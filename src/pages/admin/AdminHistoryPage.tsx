@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { getAllHistory } from '@/services/history.service'
 import type { History } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
 import Select from '@/components/forms/Select'
 import Badge from '@/components/ui/Badge'
@@ -282,7 +283,7 @@ function AdminHistoryPage() {
                                             {(safePage - 1) * ITEMS_PER_PAGE + idx + 1}
                                         </td>
                                         <td className="px-3 py-3">
-                                            <div className="h-10 w-8 overflow-hidden rounded bg-gray-100">
+                                            <div className="h-10 w-8 overflow-hidden rounded">
                                                 {h.bookCover ? (
                                                     <img
                                                         src={h.bookCover}
@@ -290,7 +291,7 @@ function AdminHistoryPage() {
                                                         className="h-full w-full object-cover"
                                                     />
                                                 ) : (
-                                                    <BookX className="h-full w-full p-1 text-disabled" />
+                                                    <BookCoverPlaceholder title={h.bookTitle} className="h-full w-full" />
                                                 )}
                                             </div>
                                         </td>
@@ -340,7 +341,7 @@ function AdminHistoryPage() {
                                 className="rounded-[16px] border border-border bg-white p-4 shadow-card"
                             >
                                 <div className="mb-3 flex items-start gap-3">
-                                    <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                                    <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg">
                                         {h.bookCover ? (
                                             <img
                                                 src={h.bookCover}
@@ -348,7 +349,7 @@ function AdminHistoryPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <BookX className="h-full w-full p-2 text-disabled" />
+                                            <BookCoverPlaceholder title={h.bookTitle} className="h-full w-full" />
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">
@@ -418,7 +419,7 @@ function AdminHistoryPage() {
                 {selectedHistory && (
                     <div className="flex flex-col gap-3 text-sm">
                         <div className="flex items-center gap-3">
-                            <div className="h-20 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                            <div className="h-20 w-14 shrink-0 overflow-hidden rounded-lg">
                                 {selectedHistory.bookCover ? (
                                     <img
                                         src={selectedHistory.bookCover}
@@ -426,7 +427,7 @@ function AdminHistoryPage() {
                                         className="h-full w-full object-cover"
                                     />
                                 ) : (
-                                    <BookX className="h-full w-full p-2 text-disabled" />
+                                    <BookCoverPlaceholder title={selectedHistory.bookTitle} className="h-full w-full" />
                                 )}
                             </div>
                             <div>

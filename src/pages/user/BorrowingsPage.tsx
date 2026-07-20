@@ -5,6 +5,7 @@ import { getBorrowingsByUserId } from '@/services/borrowing.service'
 import { getAllBooks } from '@/services/book.service'
 import { useAuth } from '@/hooks/useAuth'
 import type { Borrowing, Book } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
 import Select from '@/components/forms/Select'
 import Badge from '@/components/ui/Badge'
@@ -287,7 +288,7 @@ function BorrowingsPage() {
                                                 {(safePage - 1) * ITEMS_PER_PAGE + idx + 1}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <div className="h-10 w-8 overflow-hidden rounded bg-gray-100">
+                                                <div className="h-10 w-8 overflow-hidden rounded">
                                                     {b.bookCover ? (
                                                         <img
                                                             src={b.bookCover}
@@ -295,7 +296,7 @@ function BorrowingsPage() {
                                                             className="h-full w-full object-cover"
                                                         />
                                                     ) : (
-                                                        <BookOpen className="h-full w-full p-1 text-disabled" />
+                                                        <BookCoverPlaceholder title={b.bookTitle} className="h-full w-full" />
                                                     )}
                                                 </div>
                                             </td>
@@ -377,7 +378,7 @@ function BorrowingsPage() {
                                     className="rounded-[16px] border border-border bg-white p-4 shadow-card"
                                 >
                                     <div className="mb-3 flex items-start gap-3">
-                                        <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                                        <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg">
                                             {b.bookCover ? (
                                                 <img
                                                     src={b.bookCover}
@@ -385,7 +386,7 @@ function BorrowingsPage() {
                                                     className="h-full w-full object-cover"
                                                 />
                                             ) : (
-                                                <BookOpen className="h-full w-full p-2 text-disabled" />
+                                                <BookCoverPlaceholder title={b.bookTitle} className="h-full w-full" />
                                             )}
                                         </div>
                                         <div className="min-w-0 flex-1">

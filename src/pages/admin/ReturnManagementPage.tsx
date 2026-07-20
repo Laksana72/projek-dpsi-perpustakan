@@ -7,12 +7,12 @@ import {
     Wallet,
     Search,
     RotateCcw,
-    BookX,
 } from 'lucide-react'
 import { getAllReturns } from '@/services/return.service'
 import { getAllBorrowings } from '@/services/borrowing.service'
 import { getAllBooks } from '@/services/book.service'
 import type { Return, Book, Borrowing } from '@/types'
+import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
 import Select from '@/components/forms/Select'
 import Badge from '@/components/ui/Badge'
@@ -413,7 +413,7 @@ function ReturnManagementPage() {
                                                 {r.userName}
                                             </td>
                                             <td className="px-3 py-3">
-                                                <div className="h-10 w-8 overflow-hidden rounded bg-gray-100">
+                                                <div className="h-10 w-8 overflow-hidden rounded">
                                                     {r.bookCover ? (
                                                         <img
                                                             src={r.bookCover}
@@ -421,7 +421,7 @@ function ReturnManagementPage() {
                                                             className="h-full w-full object-cover"
                                                         />
                                                     ) : (
-                                                        <BookX className="h-full w-full p-1 text-disabled" />
+                                                        <BookCoverPlaceholder title={r.bookTitle} className="h-full w-full" />
                                                     )}
                                                 </div>
                                             </td>
@@ -499,7 +499,7 @@ function ReturnManagementPage() {
                                     className="rounded-[16px] border border-border bg-white p-4 shadow-card"
                                 >
                                     <div className="mb-3 flex items-start gap-3">
-                                        <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                                        <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg">
                                             {r.bookCover ? (
                                                 <img
                                                     src={r.bookCover}
@@ -507,7 +507,7 @@ function ReturnManagementPage() {
                                                     className="h-full w-full object-cover"
                                                 />
                                             ) : (
-                                                <BookX className="h-full w-full p-2 text-disabled" />
+                                                <BookCoverPlaceholder title={r.bookTitle} className="h-full w-full" />
                                             )}
                                         </div>
                                         <div className="min-w-0 flex-1">

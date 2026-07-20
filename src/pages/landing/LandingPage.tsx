@@ -1,14 +1,56 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
     BookOpen, Library, Bell, Zap, ThumbsUp, Shield, Layers,
     Instagram, Youtube, Facebook, Twitter
 } from 'lucide-react'
-import { books } from '@/data/books'
+import { api } from '@/services/api'
+import type { Book as BookType } from '@/types'
 import Button from '@/components/ui/Button'
 import BookCard from '@/components/cards/BookCard'
 import Navbar from '@/components/layout/Navbar'
 import uadLogo from '@/assets/logo/logo-uad.png'
 import heroImg from '@/assets/images/landing.jpg'
+
+interface ApiBook {
+    id: number
+    title: string
+    author: string
+    isbn: string
+    publisher: { id: number; name: string }
+    year: number
+    category: { id: number; name: string }
+    description: string
+    cover: string | null
+    status: string
+    pages: number
+    language: string
+    edition: string
+    added_date: string
+    location: string
+    call_number: string
+}
+
+function parseBook(item: ApiBook): BookType {
+    return {
+        id: String(item.id),
+        title: item.title,
+        author: item.author,
+        isbn: item.isbn,
+        publisher: item.publisher?.name ?? '',
+        year: item.year,
+        category: item.category?.name ?? '',
+        description: item.description ?? '',
+        cover: item.cover ?? '',
+        status: item.status as BookType['status'],
+        pages: item.pages ?? 0,
+        language: item.language,
+        edition: item.edition,
+        addedDate: item.added_date,
+        location: item.location,
+        callNumber: item.call_number,
+    }
+}
 
 const heroFeatures = [
     {
@@ -57,7 +99,15 @@ const keunggulan = [
 ]
 
 function LandingPage() {
-    const displayBooks = books.slice(0, 8)
+    const [books, setBooks] = useState<BookType[]>([])
+
+    useEffect(() => {
+        api.get<{ data: ApiBook[] }>('/books?per_page=8')
+            .then((res) => setBooks(res.data.map(parseBook)))
+            .catch(() => setBooks([]))
+    }, [])
+
+    const displayBooks = books
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -218,9 +268,11 @@ function LandingPage() {
                                     }}
                                 >
                                     <BookCard
+                                        cover={book.cover}
                                         title={book.title}
                                         author={book.author}
                                         category={book.category}
+                                        year={book.year}
                                         status={book.status}
                                         onDetail={() => (window.location.href = `/book/${book.id}`)}
                                     />

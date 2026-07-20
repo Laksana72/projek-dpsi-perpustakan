@@ -1,10 +1,10 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
     BookOpen, Search,
     Instagram, Youtube, Facebook, Twitter,
 } from 'lucide-react'
-import { books } from '@/data/books'
+import { api } from '@/services/api'
 import type { Book } from '@/types'
 import Button from '@/components/ui/Button'
 import BookCard from '@/components/cards/BookCard'
@@ -19,45 +19,95 @@ const mainCategories = ['Teknologi', 'Sosial', 'Pendidikan', 'Ekonomi']
 
 const ITEMS_PER_PAGE = 10
 
+interface ApiBook {
+    id: number
+    title: string
+    author: string
+    isbn: string
+    publisher: { id: number; name: string }
+    year: number
+    category: { id: number; name: string }
+    description: string
+    cover: string | null
+    status: string
+    pages: number
+    language: string
+    edition: string
+    added_date: string
+    location: string
+    call_number: string
+}
+
+function parseBook(item: ApiBook): Book {
+    return {
+        id: String(item.id),
+        title: item.title,
+        author: item.author,
+        isbn: item.isbn,
+        publisher: item.publisher?.name ?? '',
+        year: item.year,
+        category: item.category?.name ?? '',
+        description: item.description ?? '',
+        cover: item.cover ?? '',
+        status: item.status as Book['status'],
+        pages: item.pages ?? 0,
+        language: item.language,
+        edition: item.edition,
+        addedDate: item.added_date,
+        location: item.location,
+        callNumber: item.call_number,
+    }
+}
+
 function CollectionPage() {
+    const [books, setBooks] = useState<Book[]>([])
+    const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState('')
     const [activeCategory, setActiveCategory] = useState('Semua')
     const [currentPage, setCurrentPage] = useState(1)
 
-    const filteredBooks = useMemo(() => {
-        let result: Book[] = books
-
-        if (searchQuery.trim()) {
-            const q = searchQuery.toLowerCase()
-            result = result.filter(
-                (b) =>
-                    b.title.toLowerCase().includes(q) ||
-                    b.author.toLowerCase().includes(q) ||
-                    b.category.toLowerCase().includes(q),
-            )
+    const fetchBooks = useCallback(async () => {
+        setLoading(true)
+        try {
+            const params: Record<string, string> = { per_page: '100' }
+            if (searchQuery.trim()) {
+                params.q = searchQuery.trim()
+                const res = await api.get<{ data: ApiBook[] }>('/books/search', params)
+                setBooks(res.data.map(parseBook))
+            } else {
+                const res = await api.get<{ data: ApiBook[] }>('/books', params)
+                setBooks(res.data.map(parseBook))
+            }
+        } catch {
+            setBooks([])
+        } finally {
+            setLoading(false)
         }
+    }, [searchQuery])
 
-        if (activeCategory !== 'Semua') {
-            result = result.filter((b) => {
-                if (activeCategory === 'Lainnya') {
-                    return !mainCategories.includes(b.category)
-                }
-                return b.category === activeCategory
-            })
-        }
+    useEffect(() => {
+        fetchBooks()
+    }, [searchQuery, fetchBooks])
 
-        return result
-    }, [searchQuery, activeCategory])
+    const filteredBooks = books.filter((b) => {
+        if (activeCategory === 'Semua') return true
+        if (activeCategory === 'Lainnya') return !mainCategories.includes(b.category)
+        return b.category === activeCategory
+    })
 
     const totalPages = Math.max(1, Math.ceil(filteredBooks.length / ITEMS_PER_PAGE))
     const safePage = Math.min(currentPage, totalPages)
-    const paginatedBooks = useMemo(
-        () => filteredBooks.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE),
-        [filteredBooks, safePage],
+    const paginatedBooks = filteredBooks.slice(
+        (safePage - 1) * ITEMS_PER_PAGE,
+        safePage * ITEMS_PER_PAGE,
     )
 
     const handleCategoryChange = (cat: string) => {
         setActiveCategory(cat)
+        setCurrentPage(1)
+    }
+
+    const handleSearch = () => {
         setCurrentPage(1)
     }
 
@@ -133,6 +183,7 @@ function CollectionPage() {
                             <Button
                                 variant="primary"
                                 size="md"
+                                onClick={handleSearch}
                                 className="mr-2 h-[52px] w-[120px] rounded-[12px] bg-[#1D63ED] text-[15px] text-white hover:bg-[#1D63ED]/90"
                             >
                                 Cari
@@ -164,20 +215,29 @@ function CollectionPage() {
 
                     {/* Results count */}
                     <p className="mb-8 text-sm text-gray-500">
-                        Menampilkan {filteredBooks.length} buku
+                        {loading
+                            ? 'Memuat data...'
+                            : `Menampilkan ${filteredBooks.length} buku`
+                        }
                         {activeCategory !== 'Semua' && ` di kategori "${activeCategory}"`}
                         {searchQuery && ` untuk pencarian "${searchQuery}"`}
                     </p>
 
                     {/* Book Grid */}
-                    {paginatedBooks.length > 0 ? (
+                    {loading ? (
+                        <div className="flex items-center justify-center py-16">
+                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#1D63ED] border-t-transparent" />
+                        </div>
+                    ) : paginatedBooks.length > 0 ? (
                         <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                             {paginatedBooks.map((book) => (
                                 <BookCard
                                     key={book.id}
+                                    cover={book.cover}
                                     title={book.title}
                                     author={book.author}
                                     category={book.category}
+                                    year={book.year}
                                     status={book.status}
                                     onDetail={() => (window.location.href = `/book/${book.id}`)}
                                 />

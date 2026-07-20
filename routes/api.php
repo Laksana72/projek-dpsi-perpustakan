@@ -15,6 +15,11 @@ use App\Http\Controllers\Api\DashboardController;
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
 
+// Public book catalog (no auth required)
+Route::get('/books', [BookController::class, 'index']);
+Route::get('/books/search', [BookController::class, 'search']);
+Route::get('/books/{book}', [BookController::class, 'show']);
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Auth
@@ -27,9 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard/admin', [DashboardController::class, 'admin']);
     Route::get('/dashboard/user', [DashboardController::class, 'user']);
 
-    // Books
-    Route::get('/books/search', [BookController::class, 'search']);
-    Route::apiResource('books', BookController::class);
+    // Books (protected mutations only)
+    Route::post('/books', [BookController::class, 'store']);
+    Route::put('/books/{book}', [BookController::class, 'update']);
+    Route::delete('/books/{book}', [BookController::class, 'destroy']);
 
     // Categories
     Route::apiResource('categories', CategoryController::class);

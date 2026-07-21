@@ -105,6 +105,11 @@ const routes: RouteObject[] = [
                 children: [{ index: true, element: <BookManagementPage /> }],
             },
             {
+                path: '/admin/book/:id',
+                element: <AdminLayout />,
+                children: [{ index: true, element: <DetailBookPage /> }],
+            },
+            {
                 path: '/admin/borrowings',
                 element: <AdminLayout />,
                 children: [{ index: true, element: <BorrowingManagementPage /> }],

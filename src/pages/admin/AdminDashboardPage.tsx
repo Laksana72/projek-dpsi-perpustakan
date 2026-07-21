@@ -474,7 +474,7 @@ function AdminDashboardPage() {
                                         category={book.category}
                                         year={book.year}
                                         status={book.status}
-                                        onDetail={() => navigate(`/book/${book.id}`)}
+                                        onDetail={() => navigate(`/admin/book/${book.id}`)}
                                     />
                                 )
                             })}

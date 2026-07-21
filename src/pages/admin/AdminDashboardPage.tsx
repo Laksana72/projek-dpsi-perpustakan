@@ -540,7 +540,7 @@ function AdminDashboardPage() {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                onClick={() => navigate(`/book/${b.bookId}`)}
+                                                onClick={() => navigate(`/admin/book/${b.bookId}`)}
                                                 aria-label={`Detail ${b.bookTitle}`}
                                             >
                                                 Detail
@@ -582,7 +582,7 @@ function AdminDashboardPage() {
                                 <Button
                                     variant="primary"
                                     size="sm"
-                                    onClick={() => navigate(`/book/${b.bookId}`)}
+                                    onClick={() => navigate(`/admin/book/${b.bookId}`)}
                                 >
                                     Detail
                                 </Button>
@@ -661,7 +661,7 @@ function AdminDashboardPage() {
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            onClick={() => navigate(`/book/${r.bookId}`)}
+                                            onClick={() => navigate(`/admin/book/${r.bookId}`)}
                                             aria-label={`Detail ${r.bookTitle}`}
                                         >
                                             Detail
@@ -706,7 +706,7 @@ function AdminDashboardPage() {
                             <Button
                                 variant="primary"
                                 size="sm"
-                                onClick={() => navigate(`/book/${r.bookId}`)}
+                                onClick={() => navigate(`/admin/book/${r.bookId}`)}
                             >
                                 Detail
                             </Button>

@@ -460,7 +460,7 @@ function ReturnManagementPage() {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => navigate(`/book/${r.bookId}`)}
+                                                        onClick={() => navigate(`/admin/book/${r.bookId}`)}
                                                         aria-label={`Detail ${r.bookTitle}`}
                                                     >
                                                         Detail
@@ -555,7 +555,7 @@ function ReturnManagementPage() {
                                         <Button
                                             variant="primary"
                                             size="sm"
-                                            onClick={() => navigate(`/book/${r.bookId}`)}
+                                            onClick={() => navigate(`/admin/book/${r.bookId}`)}
                                         >
                                             Detail
                                         </Button>

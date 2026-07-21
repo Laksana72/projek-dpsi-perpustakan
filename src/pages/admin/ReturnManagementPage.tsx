@@ -11,6 +11,7 @@ import {
 import { getAllReturns } from '@/services/return.service'
 import { getAllBorrowings } from '@/services/borrowing.service'
 import { getAllBooks } from '@/services/book.service'
+import { useAuth } from '@/hooks/useAuth'
 import type { Return, Book, Borrowing } from '@/types'
 import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
@@ -50,6 +51,8 @@ function computeLateDays(dueDate: string, returnDate: string): number {
 
 function ReturnManagementPage() {
     const navigate = useNavigate()
+    const { isPustakawan } = useAuth()
+    const bookPrefix = isPustakawan ? '/pustakawan' : '/admin'
     const [search, setSearch] = useState('')
     const [statusFilter, setStatusFilter] = useState('')
     const [categoryFilter, setCategoryFilter] = useState('')
@@ -460,7 +463,7 @@ function ReturnManagementPage() {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => navigate(`/admin/book/${r.bookId}`)}
+                                                        onClick={() => navigate(`${bookPrefix}/book/${r.bookId}`)}
                                                         aria-label={`Detail ${r.bookTitle}`}
                                                     >
                                                         Detail
@@ -555,7 +558,7 @@ function ReturnManagementPage() {
                                         <Button
                                             variant="primary"
                                             size="sm"
-                                            onClick={() => navigate(`/admin/book/${r.bookId}`)}
+                                            onClick={() => navigate(`${bookPrefix}/book/${r.bookId}`)}
                                         >
                                             Detail
                                         </Button>

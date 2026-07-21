@@ -175,6 +175,11 @@ const routes: RouteObject[] = [
                 children: [{ index: true, element: <BookManagementPage /> }],
             },
             {
+                path: '/pustakawan/book/:id',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <DetailBookPage /> }],
+            },
+            {
                 path: '/pustakawan/borrowings',
                 element: <PustakawanLayout />,
                 children: [{ index: true, element: <BorrowingManagementPage /> }],

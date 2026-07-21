@@ -11,7 +11,7 @@ return new class extends Migration
             $table->string('nim')->nullable()->unique();
             $table->string('program_studi')->nullable();
             $table->string('avatar')->nullable();
-            $table->enum('role', ['user', 'admin'])->default('user');
+            $table->enum('role', ['user', 'pustakawan', 'admin'])->default('user');
             $table->string('membership_status')->default('Active');
             $table->date('membership_expiry')->nullable();
         });

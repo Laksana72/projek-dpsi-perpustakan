@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import {
     LayoutDashboard,
-    BookOpen,
+    ClipboardCheck,
     BookMarked,
     RefreshCw,
+    BookText,
     User,
     LogOut,
     Sun,
@@ -20,9 +21,10 @@ import uadLogo from '@/assets/logo/logo-uad.png'
 
 const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard, path: '/pustakawan/dashboard' },
-    { label: 'Kelola Buku', icon: BookOpen, path: '/pustakawan/books' },
-    { label: 'Peminjaman', icon: BookMarked, path: '/pustakawan/borrowings' },
-    { label: 'Pengembalian', icon: RefreshCw, path: '/pustakawan/returns' },
+    { label: 'Validasi Reservasi', icon: ClipboardCheck, path: '/pustakawan/reservations' },
+    { label: 'Data Peminjaman', icon: BookMarked, path: '/pustakawan/borrowings' },
+    { label: 'Data Pengembalian', icon: RefreshCw, path: '/pustakawan/returns' },
+    { label: 'Stok & Katalog Buku', icon: BookText, path: '/pustakawan/books' },
     { label: 'Profil', icon: User, path: '/pustakawan/profile' },
 ]
 

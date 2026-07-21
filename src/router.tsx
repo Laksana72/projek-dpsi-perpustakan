@@ -19,6 +19,7 @@ const HistoryPage = lazy(() => import('@/pages/user/HistoryPage'))
 const UserFinePage = lazy(() => import('@/pages/user/UserFinePage'))
 const ProfilePage = lazy(() => import('@/pages/user/ProfilePage'))
 const PustakawanDashboardPage = lazy(() => import('@/pages/pustakawan/PustakawanDashboardPage'))
+const ValidasiReservasiPage = lazy(() => import('@/pages/pustakawan/ValidasiReservasiPage'))
 const PustakawanLayout = lazy(() => import('@/layouts/PustakawanLayout'))
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
 const BookManagementPage = lazy(() => import('@/pages/admin/BookManagementPage'))
@@ -157,6 +158,11 @@ const routes: RouteObject[] = [
                 path: '/pustakawan/dashboard',
                 element: <PustakawanLayout />,
                 children: [{ index: true, element: <PustakawanDashboardPage /> }],
+            },
+            {
+                path: '/pustakawan/reservations',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <ValidasiReservasiPage /> }],
             },
             {
                 path: '/pustakawan/books',

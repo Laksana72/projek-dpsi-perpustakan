@@ -1,1 +1,0 @@
-import{a}from"./index-DorBB0av.js";function e(r){return{id:String(r.id),name:r.name,email:r.email,nim:r.nim??"",programStudi:r.program_studi??"",avatar:r.avatar??"",role:r.role,membershipStatus:r.membership_status??"",membershipExpiry:r.membership_expiry??""}}async function n(){return(await a.get("/members")).data.map(e)}export{n as g};

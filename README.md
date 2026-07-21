@@ -1,165 +1,291 @@
-# Library Management System - Frontend
+# Sistem Informasi Perpustakaan
 
-Aplikasi web manajemen perpustakaan modern yang dibangun dengan React, TypeScript, dan Tailwind CSS.
+Aplikasi web manajemen perpustakaan modern untuk civitas akademika Universitas Ahmad Dahlan. Dibangun dengan **React + TypeScript** (frontend) dan **Laravel 13** (backend REST API).
 
-## Tech Stack
+**Live Demo:** [projek-dpsi-perpustakan.vercel.app](https://projek-dpsi-perpustakan.vercel.app)
+
+---
+
+## 👥 Tim Pengembang
+
+| Nama | NIM | Peran |
+|------|-----|-------|
+| Aminudin Setya Wibawa | 2200016151 | Requirements, UI/UX, Frontend, Backend, Testing, Laporan |
+| Laksana Yoga Kurniawan | 2200016055 | Requirements, UI/UX, Frontend, Backend, Testing, Hosting |
+| Weka Hayu Pratista | 2200016004 | Requirements, UI/UX, Frontend |
+| Dania Elsadig | 2406016055 | Requirements, UI/UX |
+
+---
+
+## ✨ Fitur
+
+### Berdasarkan Role
+
+| Role | Akses |
+|------|-------|
+| **Guest** (Publik) | Landing page, koleksi buku, about, bantuan, login |
+| **User** (Mahasiswa/Dosen) | Dashboard, katalog, detail buku, peminjaman, riwayat, denda, profil |
+| **Pustakawan** | Dashboard, validasi reservasi, kelola buku, peminjaman, pengembalian, profil |
+| **Admin** | Semua fitur pustakawan + dashboard admin, kelola anggota, kategori, penerbit, denda, laporan |
+
+### Fitur Umum
+
+- Autentikasi dengan Laravel Sanctum (token-based)
+- Role-based route protection (3 role)
+- CRUD buku, kategori, penerbit, anggota, peminjaman, denda
+- Validasi reservasi (approve/reject)
+- Notifikasi toast (sonner)
+- QR code peminjaman
+- Dark mode
+- Responsive (desktop, tablet, mobile)
+- Lazy loading (React.lazy + Suspense)
+- Error boundary global
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
 
 | Teknologi | Versi |
 |-----------|-------|
 | React | 19 |
-| TypeScript | 5.x |
+| TypeScript | 5.7 |
 | Vite | 6 |
 | Tailwind CSS | 4 |
-| React Router | 7 |
+| React Router DOM | 7 |
 | React Hook Form | 7 |
 | Zod | 3 |
-| Lucide React | 0.468 |
-| Sonner | 1.x |
+| Lucide React | - |
+| Sonner | 1 |
 | date-fns | 4 |
 | Framer Motion | 11 |
 | Recharts | 2 |
+| Axios | 1 |
 
-## Folder Structure
+### Backend
 
-```
-src/
-├── assets/          # Images, icons, illustrations
-├── components/      # Reusable UI components
-│   ├── cards/       # Card components (StatCard, BookCard, ProfileCard, etc.)
-│   ├── common/      # Barrel exports
-│   ├── feedback/    # Modal, Alert, Toast, Skeleton, Spinner, ErrorBoundary
-│   ├── forms/       # Input, Select, Checkbox, Radio, Switch, SearchInput
-│   ├── layout/      # Header, Footer, ProtectedRoute, PublicRoute, ContentContainer
-│   ├── navigation/  # Sidebar, SidebarItem, Pagination, Breadcrumb, NavbarItem
-│   ├── tables/      # Table component
-│   └── ui/          # Button, Badge, Avatar, Chip, Divider, Tooltip, Dropdown
-├── constants/       # App constants (routes, pagination, API endpoints)
-├── contexts/        # React Context providers
-│   ├── AuthContext  # Authentication state + localStorage persistence
-│   ├── ThemeContext # Light/dark mode toggle
-│   ├── NotificationContext # Sonner toast wrapper
-│   └── LoadingContext # Global loading overlay
-├── data/            # Dummy data (books, users, borrowings, returns, etc.)
-├── hooks/           # Custom hooks (useAuth)
-├── layouts/         # Layout components (GuestLayout, UserLayout, AdminLayout)
-├── pages/           # Page components
-│   ├── landing/    # LandingPage
-│   ├── auth/       # LoginPage
-│   ├── user/       # Dashboard, Catalog, DetailBook, Borrowings, History, Profile
-│   ├── admin/      # AdminDashboard, ReturnManagement
-│   └── shared/     # NotFoundPage
-├── services/        # Service layer (reads dummy data, ready for API integration)
-├── styles/          # CSS: design tokens, typography, animations, dark mode
-├── types/           # TypeScript interfaces
-└── utils/           # Utility functions (cn)
-```
+| Teknologi | Versi |
+|-----------|-------|
+| PHP | ^8.3 |
+| Laravel | ^13.8 |
+| Laravel Sanctum | ^4.3 |
+| SQLite (dev) / MySQL (production) | - |
 
-## Installation
+---
+
+## 📦 Instalasi
+
+### Prasyarat
+
+- Node.js 18+
+- PHP 8.3+
+- Composer
+- SQLite (development) atau MySQL (production)
+
+### Langkah-langkah
 
 ```bash
+# Clone repository
+git clone https://github.com/Laksana72/projek-dpsi-perpustakan.git
+cd perpustakaan
+
+# Install dependensi frontend
 npm install
-```
 
-## Running
+# Install dependensi backend
+composer install
 
-```bash
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Jalankan migrasi dan seeder
+php artisan migrate:fresh --seed
+
+# Jalankan development server
+# Terminal 1: Backend
+php artisan serve
+
+# Terminal 2: Frontend
 npm run dev
 ```
 
-Aplikasi berjalan di `http://localhost:5173`.
+Frontend berjalan di `http://localhost:3000`, backend di `http://localhost:8000`.
 
-## Scripts
+---
 
+## 🔑 Akun Testing
+
+| Role | Username / Email | Password |
+|------|-----------------|----------|
+| **Admin** | `admin` / `admin@perpustakaan.ac.id` | `admin123` |
+| **Pustakawan** | `pustakawan` / `pustakawan@perpustakaan.ac.id` | `pustakawan123` |
+| **User** | `user` / `user@perpustakaan.ac.id` | `123456` |
+| **User** | `ahmad.rizki@student.ac.id` | `password` |
+| **User** | `siti.nurhaliza@student.ac.id` | `password` |
+
+---
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
+
+Repository terhubung dengan Vercel — auto-deploy dari branch `main`.
+
+**Environment variable yang diperlukan:**
+```
+VITE_API_URL=https://projek-dpsi-perpustakan-production-4a99.up.railway.app/api
+```
+
+### Backend (Railway)
+
+Deployment menggunakan Dockerfile dengan PHP 8.4.
+
+**Environment variable yang diperlukan:**
+```
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=<generate dengan php artisan key:generate>
+APP_URL=https://projek-dpsi-perpustakan-production-4a99.up.railway.app
+DB_CONNECTION=mysql
+DB_HOST=<host>
+DB_PORT=3306
+DB_DATABASE=<database>
+DB_USERNAME=<username>
+DB_PASSWORD=<password>
+FRONTEND_URL=https://projek-dpsi-perpustakan.vercel.app
+```
+
+---
+
+## 📂 Struktur Proyek
+
+```
+perpustakaan/
+├── app/                    # Backend Laravel
+│   ├── Http/
+│   │   ├── Controllers/Api/  # API controllers (11)
+│   │   └── Middleware/        # RoleMiddleware, AdminMiddleware
+│   ├── Models/               # Book, User, Borrowing, Fine, Category, Publisher
+│   └── ...
+├── bootstrap/
+├── config/                # cors.php, database.php, sanctum.php, dll
+├── database/
+│   ├── migrations/          # 10 migration files
+│   ├── factories/           # BookFactory, UserFactory
+│   └── seeders/             # DatabaseSeeder
+├── docs/                   # Dokumentasi (SRS, arsitektur, dll)
+├── routes/
+│   └── api.php             # Semua endpoint API
+├── src/                    # Frontend React
+│   ├── components/         # 30+ reusable components
+│   │   ├── cards/
+│   │   ├── feedback/       # Modal, ErrorBoundary, Skeleton, dll
+│   │   ├── forms/          # Input, Select, SearchInput, dll
+│   │   ├── layout/         # ProtectedRoute, PublicRoute, Header, Footer
+│   │   ├── navigation/     # Sidebar, Pagination, Breadcrumb
+│   │   └── ui/             # Button, Badge, Avatar, Tooltip, dll
+│   ├── contexts/           # Auth, Theme, Loading, Notification
+│   ├── hooks/              # useAuth
+│   ├── layouts/            # GuestLayout, UserLayout, AdminLayout, PustakawanLayout
+│   ├── pages/
+│   │   ├── admin/          # 11 pages
+│   │   ├── auth/           # LoginPage
+│   │   ├── collection/     # CollectionPage
+│   │   ├── help/
+│   │   ├── landing/        # LandingPage
+│   │   ├── pustakawan/     # 2 pages
+│   │   ├── shared/         # NotFoundPage
+│   │   └── user/           # 7 pages
+│   ├── services/           # API service layer (13 files)
+│   ├── styles/
+│   └── types/
+├── Dockerfile              # PHP 8.4 container
+├── vercel.json             # SPA rewrites
+└── vite.config.ts          # Vite config (port 3000, @ alias)
+```
+
+---
+
+## 📖 API Endpoints
+
+### Public
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| POST | `/api/login` | Login |
+| GET | `/api/books` | Daftar buku (paginasi, filter) |
+| GET | `/api/books/search` | Cari buku |
+| GET | `/api/books/{id}` | Detail buku |
+
+### Authenticated
+| Method | Endpoint | Role | Deskripsi |
+|--------|----------|------|-----------|
+| POST | `/api/logout` | All | Logout |
+| GET | `/api/user` | All | Profil user |
+| PUT | `/api/user` | All | Update profil |
+| PUT | `/api/user/password` | All | Ganti password |
+| GET | `/api/dashboard/{role}` | Sesuai role | Statistik dashboard |
+| POST/PUT/DELETE | `/api/books/*` | Admin/Pustakawan | CRUD buku |
+| GET | `/api/categories` | All | Daftar kategori |
+| POST/PUT/DELETE | `/api/categories/*` | Admin/Pustakawan | CRUD kategori |
+| GET | `/api/publishers` | All | Daftar penerbit |
+| POST/PUT/DELETE | `/api/publishers/*` | Admin/Pustakawan | CRUD penerbit |
+| GET/POST/PUT/DELETE | `/api/members/*` | Admin | CRUD anggota |
+| GET/POST/PUT/DELETE | `/api/borrowings/*` | All/Admin | CRUD peminjaman |
+| POST | `/api/borrowings/{id}/approve` | Admin/Pustakawan | Setujui peminjaman |
+| POST | `/api/borrowings/{id}/reject` | Admin/Pustakawan | Tolak peminjaman |
+| POST | `/api/borrowings/{id}/return` | Admin/Pustakawan | Kembalikan buku |
+| GET | `/api/returns` | Admin/Pustakawan | Data pengembalian |
+| GET | `/api/fines` | Admin | Data denda |
+| GET | `/api/fines/user` | User | Denda user |
+| POST | `/api/fines/{id}/pay` | Admin/Pustakawan | Bayar denda |
+| GET | `/api/history` | Admin | Riwayat |
+
+---
+
+## 📜 Scripts
+
+### Frontend
 | Script | Deskripsi |
 |--------|-----------|
-| `npm run dev` | Menjalankan development server |
-| `npm run build` | Build produksi (TypeScript + Vite) |
-| `npm run preview` | Preview build produksi |
+| `npm run dev` | Development server (port 3000) |
+| `npm run build` | Build produksi |
+| `npm run preview` | Preview build |
 | `npm run lint` | ESLint check |
 | `npm run format` | Prettier format |
 
-## Dummy Accounts
+### Backend
+| Script | Deskripsi |
+|--------|-----------|
+| `composer setup` | Setup lengkap |
+| `composer dev` | Jalankan semua service |
+| `composer test` | Jalankan test |
+| `php artisan migrate:fresh --seed` | Reset DB + seeding |
+| `php artisan books:fetch-covers` | Fetch cover dari Open Library |
 
-| Role | Username | Password |
-|------|----------|----------|
-| User | `user` | `123456` |
-| Admin | `admin` | `admin123` |
+---
 
-## User Roles
+## 🎨 Design System
 
-### Guest
-- Landing Page, Login, melihat koleksi buku
+- 30+ komponen reusable dengan varian, ukuran, dan state
+- Design tokens: warna, tipografi, spacing, shadow, animasi
+- Dark mode via CSS variables + Tailwind CSS v4 `@theme`
+- Responsive: mobile-first, 4 breakpoints
 
-### User (Mahasiswa/Dosen)
-- Dashboard, Katalog Buku, Detail Buku
-- Peminjaman Saya, Riwayat, Denda
-- Profil
+---
 
-### Admin (Petugas Perpustakaan)
-- Dashboard Admin, Kelola Buku, Data Peminjaman
-- Data Pengembalian, Riwayat, Profil
+## 📄 Dokumentasi
 
-## Routes
+Dokumentasi lengkap tersedia di folder [`docs/`](./docs):
+- SRS (Software Requirements Specification)
+- Arsitektur sistem
+- Spesifikasi komponen
+- Design system
+- Information architecture
+- Sprint planning & project state
+- Dan lainnya
 
-| Route | Layout | Access |
-|-------|--------|--------|
-| `/` | Guest | Public |
-| `/login` | Guest | Guest only |
-| `/dashboard` | User | User |
-| `/catalog` | User | User |
-| `/book/:id` | User | User |
-| `/borrowings` | User | User |
-| `/history` | User | User |
-| `/profile` | User | User |
-| `/admin/dashboard` | Admin | Admin |
-| `/admin/returns` | Admin | Admin |
-| `*` | - | Any (404) |
+---
 
-## Key Features
-
-- **Authentication**: Dummy auth dengan localStorage persistence & Remember Me
-- **Route Protection**: Guest/User/Admin role-based guards
-- **Theme**: Light/Dark mode toggle
-- **Lazy Loading**: Code splitting via React.lazy untuk setiap halaman
-- **Global State**: Auth, Theme, Loading, Notification contexts
-- **Service Layer**: 6 service files siap diintegrasikan dengan REST API
-- **Error Boundary**: Global error handling dengan retry
-- **Responsive**: Desktop, Laptop, Tablet, Mobile
-- **Accessibility**: ARIA labels, keyboard navigation, semantic HTML
-- **Dummy Data**: 8+ data modules siap diganti API
-
-## Design System
-
-- Design tokens: colors, typography, spacing, shadows, animations
-- 25+ reusable components with variants, sizes, states
-- Dark mode CSS variables (prepared, toggle active)
-- Tailwind CSS v4 with @theme configuration
-
-## Backend Integration
-
-Seluruh data dipisahkan dari UI melalui:
-- `src/data/` — dummy JSON data
-- `src/services/` — async service functions (ready for API calls)
-
-Untuk integrasi backend:
-1. Ganti file di `src/data/` dengan API responses
-2. Update `src/services/*.service.ts` dengan fetch/axios calls
-3. Struktur komponen tidak perlu diubah
-
-# Proyek Akhir DPSI - Sistem Informasi Perpustakaan
-**Kelompok - DPSI 2026**
-
-## 👥 Anggota Tim
-Aminudin Setya Wibawa_2200016151 (pengambilan kebutuhan, ui/ux, front-end, back-end, testing, laporan, uplod github)
-Laksana Yoga Kurniawan_2200016055 (pengambilan kebutuhan, ui/ux, frond-end, back-end, testing, hosting)
-⁠⁠Weka Hayu Pratista _2200016004 (pengambilan kebutuhan, ui/ux, frond-end)
-Dania Elsadig_2406016055 (pengambilan kebutuhan, ui/ux)
-
-## 📌 Deskripsi Proyek
-Aplikasi ini dirancang untuk menyelesaikan permasalahan pengelolaan data pada sistem perpustakaan secara digital, sistematis, dan terintegrasi mulai dari analisis kebutuhan hingga tahap deployment.
-
-## 📁 Struktur Folder Proyek
-* `frontend/` - Source code antarmuka pengguna (Client-side)
-* `backend/` - Source code logic & API (Server-side)
-* `docs/` - Dokumentasi Proyek (SRS, User Flow, ERD, API Spec)
-
+**Proyek Akhir DPSI 2026 — Universitas Ahmad Dahlan**

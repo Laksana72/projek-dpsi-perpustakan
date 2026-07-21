@@ -12,6 +12,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Pagination from '@/components/navigation/Pagination'
 import Modal from '@/components/feedback/Modal'
+import QRCodeModal from '@/components/feedback/QRCodeModal'
 
 const ITEMS_PER_PAGE = 10
 
@@ -56,6 +57,7 @@ function BorrowingsPage() {
     const [sort, setSort] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [modal, setModal] = useState<ActionModals | null>(null)
+    const [qrModal, setQrModal] = useState<Borrowing | null>(null)
 
     useEffect(() => {
         if (!user) return
@@ -324,6 +326,15 @@ function BorrowingsPage() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex flex-wrap gap-1">
+                                                    {b.status !== 'Returned' && (
+                                                        <button
+                                                            onClick={() => setQrModal(b)}
+                                                            className="flex items-center gap-1 rounded-lg bg-[#0B1B3D] px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#0B1B3D]/90"
+                                                        >
+                                                            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="6" x2="14" y2="6"/></svg>
+                                                            QR
+                                                        </button>
+                                                    )}
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
@@ -418,6 +429,15 @@ function BorrowingsPage() {
                                         </span>
                                     </div>
                                     <div className="flex gap-2">
+                                        {b.status !== 'Returned' && (
+                                            <button
+                                                onClick={() => setQrModal(b)}
+                                                className="flex items-center gap-1 rounded-lg bg-[#0B1B3D] px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#0B1B3D]/90"
+                                            >
+                                                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="6" x2="14" y2="6"/></svg>
+                                                QR
+                                            </button>
+                                        )}
                                         <Button
                                             variant="primary"
                                             size="sm"
@@ -487,6 +507,13 @@ function BorrowingsPage() {
                         : 'Fitur pengembalian buku belum tersedia. Silakan hubungi petugas perpustakaan.'}
                 </p>
             </Modal>
+
+            <QRCodeModal
+                open={!!qrModal}
+                onClose={() => setQrModal(null)}
+                data={qrModal ? `ID Peminjaman: ${qrModal.id}\nBuku: ${qrModal.bookTitle}\nTanggal: ${new Date(qrModal.borrowDate).toLocaleDateString('id-ID')}\nJatuh Tempo: ${new Date(qrModal.dueDate).toLocaleDateString('id-ID')}` : ''}
+                title={`QR - ${qrModal?.bookTitle || ''}`}
+            />
         </div>
     )
 }

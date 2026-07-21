@@ -8,12 +8,12 @@ Aplikasi web manajemen perpustakaan modern untuk civitas akademika Universitas A
 
 ## 👥 Tim Pengembang
 
-## 👥 Tim Pengembang
-
-- Aminudin Setya Wibawa_2200016151 (pengambilan kebutuhan, ui/ux, front-end, back-end, testing, laporan, upload github)
-- Laksana Yoga Kurniawan_2200016055 (pengambilan kebutuhan, ui/ux, front-end, back-end, testing, hosting)
-- Weka Hayu Pratista _2200016004 (pengambilan kebutuhan, ui/ux, front-end), poster
-- Dania Elsadig_2406016055 (pengambilan kebutuhan, ui/ux)
+| Nama | NIM | Peran |
+|------|-----|-------|
+| Aminudin Setya Wibawa | 2200016151 | pengambilan kebutuhan, ui/ux, front-end, back-end, testing, laporan, upload github |
+| Laksana Yoga Kurniawan | 2200016055 | pengambilan kebutuhan, ui/ux, front-end, back-end, testing, hosting |
+| Weka Hayu Pratista | 2200016004 | pengambilan kebutuhan, ui/ux, front-end, poster |
+| Dania Elsadig | 2406016055 | pengambilan kebutuhan, ui/ux |
 
 ---
 

@@ -83,7 +83,7 @@ function Modal({
                         <X className="h-5 w-5" />
                     </button>
                 )}
-                <div className="px-6 py-4">{children}</div>
+                <div className="max-h-[70vh] overflow-y-auto px-6 py-4">{children}</div>
                 {footer && (
                     <div className="flex items-center justify-end gap-3 border-t border-border px-6 py-4">
                         {footer}

@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { RouterProvider } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { LoadingProvider } from '@/contexts/LoadingContext'
@@ -24,6 +25,11 @@ function App() {
                             >
                                 <RouterProvider router={router} />
                             </Suspense>
+                            <Toaster
+                                position="top-right"
+                                richColors
+                                closeButton
+                            />
                         </NotificationProvider>
                     </LoadingProvider>
                 </AuthProvider>

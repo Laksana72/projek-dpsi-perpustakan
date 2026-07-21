@@ -277,14 +277,7 @@ perpustakaan/
 
 ## 📄 Dokumentasi
 
-Dokumentasi lengkap tersedia di folder [`docs/`](./docs):
-- SRS (Software Requirements Specification)
-- Arsitektur sistem
-- Spesifikasi komponen
-- Design system
-- Information architecture
-- Sprint planning & project state
-- Dan lainnya
+Dokumentasi lengkap tersedia di https://docs.google.com/document/d/1DCkJj22-seRJOoIjPr0gw1udJ8EVLdytg2fhC9sqjdA/edit?tab=t.0
 
 ---
 

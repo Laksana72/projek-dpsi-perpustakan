@@ -37,7 +37,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     const login = async (
         usernameOrEmail: string,
         password: string,
-        role?: 'user' | 'admin',
+        role?: 'user' | 'pustakawan' | 'admin',
     ): Promise<boolean> => {
         const result = await loginService(usernameOrEmail, password)
         if (!result.success || !result.user || !result.token) return false
@@ -66,6 +66,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 user,
                 isAuthenticated: !!user,
                 isAdmin: user?.role === 'admin',
+                isPustakawan: user?.role === 'pustakawan',
                 token,
                 login,
                 logout,

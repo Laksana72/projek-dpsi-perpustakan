@@ -29,19 +29,31 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/password', [AuthController::class, 'changePassword']);
 
     // Dashboard
-    Route::get('/dashboard/admin', [DashboardController::class, 'admin']);
+    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->middleware('role:admin');
+    Route::get('/dashboard/pustakawan', [DashboardController::class, 'pustakawan'])->middleware('role:admin,pustakawan');
     Route::get('/dashboard/user', [DashboardController::class, 'user']);
 
-    // Books (protected mutations only)
-    Route::post('/books', [BookController::class, 'store']);
-    Route::put('/books/{book}', [BookController::class, 'update']);
-    Route::delete('/books/{book}', [BookController::class, 'destroy']);
+    // Books (protected mutations only) — admin & pustakawan
+    Route::middleware('role:admin,pustakawan')->group(function () {
+        Route::post('/books', [BookController::class, 'store']);
+        Route::put('/books/{book}', [BookController::class, 'update']);
+        Route::delete('/books/{book}', [BookController::class, 'destroy']);
 
-    // Categories
-    Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+        Route::apiResource('publishers', PublisherController::class)->except(['index', 'show']);
 
-    // Publishers
-    Route::apiResource('publishers', PublisherController::class);
+        Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve']);
+        Route::post('/borrowings/{borrowing}/reject', [BorrowingController::class, 'reject']);
+        Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook']);
+
+        Route::post('/fines/{fine}/pay', [FineController::class, 'pay']);
+    });
+
+    // Categories & Publishers (read-only for all authenticated)
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{category}', [CategoryController::class, 'show']);
+    Route::get('/publishers', [PublisherController::class, 'index']);
+    Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
 
     // Members (admin only)
     Route::middleware('admin')->group(function () {
@@ -50,9 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Borrowings
     Route::get('/borrowings/user/{user}', [BorrowingController::class, 'userBorrowings']);
-    Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve']);
-    Route::post('/borrowings/{borrowing}/reject', [BorrowingController::class, 'reject']);
-    Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook']);
     Route::apiResource('borrowings', BorrowingController::class);
 
     // Returns
@@ -61,7 +70,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Fines
     Route::get('/fines/user', [FineController::class, 'userFines']);
-    Route::post('/fines/{fine}/pay', [FineController::class, 'pay']);
     Route::apiResource('fines', FineController::class)->only(['index', 'show']);
 
     // History

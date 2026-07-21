@@ -76,6 +76,18 @@ class DatabaseSeeder extends Seeder
             'membership_expiry' => '2026-12-31',
         ]);
 
+        // Pustakawan
+        User::create([
+            'name' => 'pustakawan',
+            'email' => 'pustakawan@perpustakaan.ac.id',
+            'password' => Hash::make('pustakawan123'),
+            'nim' => 'PST-001',
+            'program_studi' => 'Ilmu Perpustakaan',
+            'role' => 'pustakawan',
+            'membership_status' => 'Active',
+            'membership_expiry' => '2027-12-31',
+        ]);
+
         // Categories
         $categories = [
             ['name' => 'Teknologi', 'description' => 'Buku tentang teknologi dan pemrograman'],

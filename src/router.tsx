@@ -18,6 +18,8 @@ const BorrowingsPage = lazy(() => import('@/pages/user/BorrowingsPage'))
 const HistoryPage = lazy(() => import('@/pages/user/HistoryPage'))
 const UserFinePage = lazy(() => import('@/pages/user/UserFinePage'))
 const ProfilePage = lazy(() => import('@/pages/user/ProfilePage'))
+const PustakawanDashboardPage = lazy(() => import('@/pages/pustakawan/PustakawanDashboardPage'))
+const PustakawanLayout = lazy(() => import('@/layouts/PustakawanLayout'))
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
 const BookManagementPage = lazy(() => import('@/pages/admin/BookManagementPage'))
 const BorrowingManagementPage = lazy(() => import('@/pages/admin/BorrowingManagementPage'))
@@ -145,6 +147,36 @@ const routes: RouteObject[] = [
                 path: '/admin/reports',
                 element: <AdminLayout />,
                 children: [{ index: true, element: <ReportPage /> }],
+            },
+        ],
+    },
+    {
+        element: <ProtectedRoute requiredRole="pustakawan" />,
+        children: [
+            {
+                path: '/pustakawan/dashboard',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <PustakawanDashboardPage /> }],
+            },
+            {
+                path: '/pustakawan/books',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <BookManagementPage /> }],
+            },
+            {
+                path: '/pustakawan/borrowings',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <BorrowingManagementPage /> }],
+            },
+            {
+                path: '/pustakawan/returns',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <ReturnManagementPage /> }],
+            },
+            {
+                path: '/pustakawan/profile',
+                element: <PustakawanLayout />,
+                children: [{ index: true, element: <AdminProfilePage /> }],
             },
         ],
     },

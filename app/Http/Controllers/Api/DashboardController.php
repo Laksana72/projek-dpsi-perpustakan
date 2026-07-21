@@ -58,4 +58,21 @@ class DashboardController extends Controller
             'pendingFines' => $pendingFines,
         ]);
     }
+
+    public function pustakawan()
+    {
+        $totalBooks = Book::count();
+        $totalBorrowings = Borrowing::where('status', 'Borrowed')->count();
+        $pendingApprovals = Borrowing::where('status', 'Pending')->count();
+        $returnsToday = Borrowing::where('status', 'Borrowed')
+            ->whereDate('due_date', now()->toDateString())
+            ->count();
+
+        return response()->json([
+            'totalBooks' => $totalBooks,
+            'totalBorrowings' => $totalBorrowings,
+            'pendingApprovals' => $pendingApprovals,
+            'returnsToday' => $returnsToday,
+        ]);
+    }
 }

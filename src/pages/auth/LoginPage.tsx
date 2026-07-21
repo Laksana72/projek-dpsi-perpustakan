@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { BookOpen, Eye, EyeOff, LogIn, User, Shield } from 'lucide-react'
+import { BookOpen, Eye, EyeOff, LogIn, User, Shield, BookMarked } from 'lucide-react'
 import Card from '@/components/cards/Card'
 import Input from '@/components/forms/Input'
 import Checkbox from '@/components/forms/Checkbox'
@@ -20,7 +20,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 function LoginPage() {
     const { login } = useAuth()
-    const [role, setRole] = useState<'user' | 'admin'>('user')
+    const [role, setRole] = useState<'user' | 'pustakawan' | 'admin'>('user')
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -43,7 +43,9 @@ function LoginPage() {
                 setError(
                     role === 'admin'
                         ? 'Login admin gagal. Periksa kembali username dan password.'
-                        : 'Username atau password salah.',
+                        : role === 'pustakawan'
+                            ? 'Login pustakawan gagal. Periksa kembali username dan password.'
+                            : 'Username atau password salah.',
                 )
             }
         } catch {
@@ -97,7 +99,20 @@ function LoginPage() {
                             )}
                         >
                             <User className="h-4 w-4" />
-                            Mahasiswa / User
+                            Mahasiswa
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setRole('pustakawan')}
+                            className={cn(
+                                'flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-all duration-200',
+                                role === 'pustakawan'
+                                    ? 'bg-white text-primary shadow-sm'
+                                    : 'text-text-secondary hover:text-text-primary',
+                            )}
+                        >
+                            <BookMarked className="h-4 w-4" />
+                            Pustakawan
                         </button>
                         <button
                             type="button"

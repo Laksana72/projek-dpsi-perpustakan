@@ -9,6 +9,7 @@ import {
     Trash2,
     RotateCcw,
 } from 'lucide-react'
+import { toast } from 'sonner'
 import { getAllBooks, createBook, updateBook, deleteBook } from '@/services/book.service'
 import { getAllCategories } from '@/services/category.service'
 import type { Book } from '@/types'
@@ -185,6 +186,44 @@ function BookManagementPage() {
             callNumber: book.callNumber,
         })
         setEditModal(book)
+    }
+
+    const handleAddBook = async () => {
+        try {
+            await createBook(formData)
+            setAddModal(false)
+            const booksData = await getAllBooks()
+            setBooks(booksData)
+            toast.success('Buku berhasil ditambahkan')
+        } catch {
+            toast.error('Gagal menambahkan buku')
+        }
+    }
+
+    const handleEditBook = async () => {
+        if (!editModal) return
+        try {
+            await updateBook(editModal.id, formData)
+            setEditModal(null)
+            const booksData = await getAllBooks()
+            setBooks(booksData)
+            toast.success('Buku berhasil diperbarui')
+        } catch {
+            toast.error('Gagal memperbarui buku')
+        }
+    }
+
+    const handleDeleteBook = async () => {
+        if (!deleteModal) return
+        try {
+            await deleteBook(deleteModal.id)
+            setDeleteModal(null)
+            const booksData = await getAllBooks()
+            setBooks(booksData)
+            toast.success('Buku berhasil dihapus')
+        } catch {
+            toast.error('Gagal menghapus buku')
+        }
     }
 
     const totalBooks = books.length
@@ -614,7 +653,7 @@ function BookManagementPage() {
                     <Button variant="outline" size="md" onClick={() => setAddModal(false)}>
                         Batal
                     </Button>
-                    <Button variant="primary" size="md" onClick={() => setAddModal(false)}>
+                    <Button variant="primary" size="md" onClick={handleAddBook}>
                         Simpan
                     </Button>
                 </div>
@@ -715,7 +754,7 @@ function BookManagementPage() {
                     <Button variant="outline" size="md" onClick={() => setEditModal(null)}>
                         Batal
                     </Button>
-                    <Button variant="primary" size="md" onClick={() => setEditModal(null)}>
+                    <Button variant="primary" size="md" onClick={handleEditBook}>
                         Simpan
                     </Button>
                 </div>
@@ -735,7 +774,7 @@ function BookManagementPage() {
                     <Button variant="outline" size="md" onClick={() => setDeleteModal(null)}>
                         Batal
                     </Button>
-                    <Button variant="danger" size="md" onClick={() => setDeleteModal(null)}>
+                    <Button variant="danger" size="md" onClick={handleDeleteBook}>
                         Hapus
                     </Button>
                 </div>

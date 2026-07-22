@@ -45,6 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve']);
         Route::post('/borrowings/{borrowing}/reject', [BorrowingController::class, 'reject']);
         Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook']);
+        Route::post('/borrowings/{borrowing}/extend', [BorrowingController::class, 'extend']);
+        Route::post('/borrowings/{borrowing}/confirm-return', [BorrowingController::class, 'confirmReturn']);
 
         Route::post('/fines/{fine}/pay', [FineController::class, 'pay']);
     });

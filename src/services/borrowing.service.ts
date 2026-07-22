@@ -66,3 +66,13 @@ export async function returnBorrowing(id: string | number): Promise<Borrowing> {
     const response = await api.post<Record<string, unknown>>(`/borrowings/${id}/return`)
     return transformBorrowing(response)
 }
+
+export async function extendBorrowing(id: string | number): Promise<Borrowing> {
+    const response = await api.post<Record<string, unknown>>(`/borrowings/${id}/extend`)
+    return transformBorrowing(response)
+}
+
+export async function confirmReturn(id: string | number): Promise<Borrowing> {
+    const response = await api.post<Record<string, unknown>>(`/borrowings/${id}/confirm-return`)
+    return transformBorrowing(response)
+}

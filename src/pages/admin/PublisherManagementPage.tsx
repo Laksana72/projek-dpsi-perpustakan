@@ -9,6 +9,7 @@ import {
     RotateCcw,
 } from 'lucide-react'
 import { getAllPublishers, createPublisher, updatePublisher, deletePublisher, type Publisher } from '@/services/publisher.service'
+import { toast } from 'sonner'
 import StatCard from '@/components/cards/StatCard'
 import Button from '@/components/ui/Button'
 import Pagination from '@/components/navigation/Pagination'
@@ -30,6 +31,7 @@ function PublisherManagementPage() {
     const [editModal, setEditModal] = useState<string | null>(null)
     const [deleteModal, setDeleteModal] = useState<string | null>(null)
     const [form, setForm] = useState({ name: '', email: '', phone: '', address: '' })
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         fetchPublishers()
@@ -350,8 +352,25 @@ function PublisherManagementPage() {
                         <Button variant="outline" size="md" onClick={() => setAddModal(false)}>
                             Batal
                         </Button>
-                        <Button variant="primary" size="md">
-                            Simpan
+                        <Button
+                            variant="primary"
+                            size="md"
+                            disabled={submitting || !form.name.trim()}
+                            onClick={async () => {
+                                setSubmitting(true)
+                                try {
+                                    await createPublisher(form)
+                                    toast.success('Penerbit berhasil ditambahkan')
+                                    setAddModal(false)
+                                    fetchPublishers()
+                                } catch {
+                                    toast.error('Gagal menambahkan penerbit')
+                                } finally {
+                                    setSubmitting(false)
+                                }
+                            }}
+                        >
+                            {submitting ? 'Menyimpan...' : 'Simpan'}
                         </Button>
                     </div>
                 </div>
@@ -393,8 +412,26 @@ function PublisherManagementPage() {
                         <Button variant="outline" size="md" onClick={() => setEditModal(null)}>
                             Batal
                         </Button>
-                        <Button variant="primary" size="md">
-                            Simpan
+                        <Button
+                            variant="primary"
+                            size="md"
+                            disabled={submitting || !form.name.trim()}
+                            onClick={async () => {
+                                if (!editModal) return
+                                setSubmitting(true)
+                                try {
+                                    await updatePublisher(editModal, form)
+                                    toast.success('Penerbit berhasil diperbarui')
+                                    setEditModal(null)
+                                    fetchPublishers()
+                                } catch {
+                                    toast.error('Gagal memperbarui penerbit')
+                                } finally {
+                                    setSubmitting(false)
+                                }
+                            }}
+                        >
+                            {submitting ? 'Menyimpan...' : 'Simpan'}
                         </Button>
                     </div>
                 </div>
@@ -413,8 +450,26 @@ function PublisherManagementPage() {
                     <Button variant="outline" size="md" onClick={() => setDeleteModal(null)}>
                         Batal
                     </Button>
-                    <Button variant="danger" size="md" leftIcon={<Trash2 className="h-4 w-4" />}>
-                        Hapus
+                    <Button
+                        variant="danger"
+                        size="md"
+                        disabled={submitting}
+                        onClick={async () => {
+                            if (!deleteModal) return
+                            setSubmitting(true)
+                            try {
+                                await deletePublisher(deleteModal)
+                                toast.success('Penerbit berhasil dihapus')
+                                setDeleteModal(null)
+                                fetchPublishers()
+                            } catch {
+                                toast.error('Gagal menghapus penerbit')
+                            } finally {
+                                setSubmitting(false)
+                            }
+                        }}
+                    >
+                        {submitting ? 'Menghapus...' : 'Hapus'}
                     </Button>
                 </div>
             </Modal>

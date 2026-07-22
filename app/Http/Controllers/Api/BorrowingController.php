@@ -101,6 +101,24 @@ class BorrowingController extends Controller
         return response()->json($borrowing->load(['user', 'book', 'fine']));
     }
 
+    public function extend(Borrowing $borrowing)
+    {
+        $borrowing->update([
+            'due_date' => now()->addDays(7)->toDateString(),
+        ]);
+
+        return response()->json($borrowing->load(['user', 'book']));
+    }
+
+    public function confirmReturn(Borrowing $borrowing)
+    {
+        $borrowing->update([
+            'confirmed_at' => now(),
+        ]);
+
+        return response()->json($borrowing->load(['user', 'book', 'fine']));
+    }
+
     public function userBorrowings(User $user)
     {
         $borrowings = Borrowing::with(['book', 'fine'])

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Borrowing extends Model
 {
     protected $fillable = [
-        'user_id', 'book_id', 'status', 'borrow_date', 'due_date', 'return_date'
+        'user_id', 'book_id', 'status', 'borrow_date', 'due_date', 'return_date', 'confirmed_at'
     ];
 
     protected function casts(): array

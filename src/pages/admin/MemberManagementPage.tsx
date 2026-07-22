@@ -12,6 +12,7 @@ import {
     X,
 } from 'lucide-react'
 import { getAllMembers, createMember, updateMember, deleteMember } from '@/services/member.service'
+import { toast } from 'sonner'
 import { getAllBorrowings } from '@/services/borrowing.service'
 import type { User, Borrowing } from '@/types'
 import StatCard from '@/components/cards/StatCard'
@@ -39,6 +40,7 @@ function MemberManagementPage() {
     const [detailModal, setDetailModal] = useState<User | null>(null)
     const [editModal, setEditModal] = useState<User | null>(null)
     const [deleteModal, setDeleteModal] = useState<string | null>(null)
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         fetchData()
@@ -692,11 +694,23 @@ function MemberManagementPage() {
                     </Button>
                     <Button
                         variant="primary"
-                        onClick={() => {
-                            setEditModal(null)
+                        disabled={submitting}
+                        onClick={async () => {
+                            if (!editModal) return
+                            setSubmitting(true)
+                            try {
+                                await updateMember(editModal.id, editForm)
+                                toast.success('Anggota berhasil diperbarui')
+                                setEditModal(null)
+                                fetchMembers()
+                            } catch {
+                                toast.error('Gagal memperbarui anggota')
+                            } finally {
+                                setSubmitting(false)
+                            }
                         }}
                     >
-                        Simpan
+                        {submitting ? 'Menyimpan...' : 'Simpan'}
                     </Button>
                 </div>
             </Modal>
@@ -717,9 +731,23 @@ function MemberManagementPage() {
                     </Button>
                     <Button
                         variant="danger"
-                        onClick={() => setDeleteModal(null)}
+                        disabled={submitting}
+                        onClick={async () => {
+                            if (!deleteModal) return
+                            setSubmitting(true)
+                            try {
+                                await deleteMember(deleteModal)
+                                toast.success('Anggota berhasil dihapus')
+                                setDeleteModal(null)
+                                fetchMembers()
+                            } catch {
+                                toast.error('Gagal menghapus anggota')
+                            } finally {
+                                setSubmitting(false)
+                            }
+                        }}
                     >
-                        Hapus
+                        {submitting ? 'Menghapus...' : 'Hapus'}
                     </Button>
                 </div>
             </Modal>

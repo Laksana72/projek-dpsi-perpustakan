@@ -9,9 +9,10 @@ import {
     RotateCcw,
 } from 'lucide-react'
 import { getAllReturns } from '@/services/return.service'
-import { getAllBorrowings } from '@/services/borrowing.service'
+import { getAllBorrowings, returnBorrowing, confirmReturn } from '@/services/borrowing.service'
 import { getAllBooks } from '@/services/book.service'
 import { useAuth } from '@/hooks/useAuth'
+import { toast } from 'sonner'
 import type { Return, Book, Borrowing } from '@/types'
 import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
@@ -66,6 +67,7 @@ function ReturnManagementPage() {
     const [borrowings, setBorrowings] = useState<Borrowing[]>([])
     const [confirmModal, setConfirmModal] = useState<string | null>(null)
     const [printModal, setPrintModal] = useState<string | null>(null)
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         setError(false)
@@ -604,20 +606,119 @@ function ReturnManagementPage() {
                 title="Konfirmasi Pengembalian"
                 size="sm"
             >
-                <p className="text-sm text-text-secondary">
-                    Fitur konfirmasi pengembalian belum tersedia. Silakan hubungi pengembang untuk informasi lebih lanjut.
-                </p>
+                {(() => {
+                    const r = returns.find((x) => x.id === confirmModal)
+                    if (!r) return null
+                    return (
+                        <>
+                            <div className="mb-4 space-y-2 text-sm text-text-secondary">
+                                <p><span className="font-medium text-text-primary">Buku:</span> {r.bookTitle}</p>
+                                <p><span className="font-medium text-text-primary">Peminjam:</span> {r.userName}</p>
+                                <p><span className="font-medium text-text-primary">Tgl Kembali:</span> {new Date(r.returnDate).toLocaleDateString('id-ID')}</p>
+                                <p><span className="font-medium text-text-primary">Status:</span> {r.status === 'Late' ? 'Terlambat' : 'Tepat Waktu'}</p>
+                                {r.fine > 0 && <p><span className="font-medium text-text-primary">Denda:</span> Rp{r.fine.toLocaleString()}</p>}
+                            </div>
+                            <p className="mb-6 text-sm text-text-secondary">Konfirmasi pengembalian buku ini?</p>
+                            <div className="flex justify-end gap-3">
+                                <Button variant="outline" onClick={() => setConfirmModal(null)}>
+                                    Batal
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    disabled={submitting}
+                                    onClick={async () => {
+                                        if (!confirmModal) return
+                                        setSubmitting(true)
+                                        try {
+                                            await confirmReturn(confirmModal)
+                                            toast.success('Pengembalian berhasil dikonfirmasi')
+                                            setConfirmModal(null)
+                                            fetchReturns()
+                                        } catch {
+                                            toast.error('Gagal mengkonfirmasi pengembalian')
+                                        } finally {
+                                            setSubmitting(false)
+                                        }
+                                    }}
+                                >
+                                    {submitting ? 'Memproses...' : 'Konfirmasi'}
+                                </Button>
+                            </div>
+                        </>
+                    )
+                })()}
             </Modal>
 
             <Modal
                 isOpen={!!printModal}
                 onClose={() => setPrintModal(null)}
                 title="Cetak Bukti Pengembalian"
-                size="sm"
+                size="md"
             >
-                <p className="text-sm text-text-secondary">
-                    Fitur cetak bukti pengembalian belum tersedia. Silakan hubungi pengembang untuk informasi lebih lanjut.
-                </p>
+                {(() => {
+                    const r = returns.find((x) => x.id === printModal)
+                    if (!r) return null
+                    return (
+                        <>
+                            <div id="receipt" className="space-y-3 p-4 text-sm">
+                                <div className="text-center border-b pb-3">
+                                    <h3 className="font-bold text-base">BUKTI PENGEMBALIAN BUKU</h3>
+                                    <p className="text-text-secondary">Perpustakaan Universitas Ahmad Dahlan</p>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <p><span className="font-medium">Judul Buku:</span> {r.bookTitle}</p>
+                                    <p><span className="font-medium">Peminjam:</span> {r.userName} ({r.nim})</p>
+                                    <p><span className="font-medium">Tgl Pinjam:</span> {new Date(r.borrowDate).toLocaleDateString('id-ID')}</p>
+                                    <p><span className="font-medium">Jatuh Tempo:</span> {new Date(r.dueDate).toLocaleDateString('id-ID')}</p>
+                                    <p><span className="font-medium">Tgl Kembali:</span> {new Date(r.returnDate).toLocaleDateString('id-ID')}</p>
+                                    <p><span className="font-medium">Status:</span> {r.status === 'Late' ? 'Terlambat' : 'Tepat Waktu'}</p>
+                                    {r.fine > 0 && <p><span className="font-medium">Denda:</span> Rp{r.fine.toLocaleString()}</p>}
+                                </div>
+                                <div className="text-center text-xs text-text-secondary pt-3 border-t mt-3">
+                                    <p>Dicetak pada: {new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                </div>
+                            </div>
+                            <div className="mt-6 flex justify-end gap-3">
+                                <Button variant="outline" onClick={() => setPrintModal(null)}>
+                                    Tutup
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    onClick={() => {
+                                        const printContent = document.getElementById('receipt')
+                                        if (!printContent) return
+                                        const win = window.open('', '_blank')
+                                        if (!win) return
+                                        win.document.write(`
+                                            <html><head><title>Bukti Pengembalian</title>
+                                            <style>
+                                                body { font-family: monospace; padding: 40px; font-size: 14px; }
+                                                .text-center { text-align: center; }
+                                                .border-b { border-bottom: 1px solid #000; }
+                                                .border-t { border-top: 1px solid #000; }
+                                                .pt-3 { padding-top: 12px; }
+                                                .pb-3 { padding-bottom: 12px; }
+                                                .mt-3 { margin-top: 12px; }
+                                                .space-y-1\\.5 > * + * { margin-top: 6px; }
+                                                .space-y-3 > * + * { margin-top: 12px; }
+                                                .font-bold { font-weight: bold; }
+                                                .font-medium { font-weight: 500; }
+                                                .text-base { font-size: 16px; }
+                                                .text-xs { font-size: 11px; }
+                                                .text-text-secondary { color: #555; }
+                                            </style></head>
+                                            <body>${printContent.innerHTML}</body></html>
+                                        `)
+                                        win.document.close()
+                                        win.print()
+                                    }}
+                                >
+                                    Cetak
+                                </Button>
+                            </div>
+                        </>
+                    )
+                })()}
             </Modal>
         </div>
     )

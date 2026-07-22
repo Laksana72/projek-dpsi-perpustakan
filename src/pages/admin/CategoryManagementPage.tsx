@@ -10,6 +10,7 @@ import {
     BookMarked,
 } from 'lucide-react'
 import { getAllCategories, createCategory, updateCategory, deleteCategory, type Category } from '@/services/category.service'
+import { toast } from 'sonner'
 import StatCard from '@/components/cards/StatCard'
 import Button from '@/components/ui/Button'
 import Pagination from '@/components/navigation/Pagination'
@@ -29,6 +30,7 @@ function CategoryManagementPage() {
     const [addModal, setAddModal] = useState(false)
     const [editModal, setEditModal] = useState<Category | null>(null)
     const [deleteModal, setDeleteModal] = useState<string | null>(null)
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         fetchCategories()
@@ -356,9 +358,23 @@ function CategoryManagementPage() {
                     </Button>
                     <Button
                         variant="primary"
-                        onClick={() => setAddModal(false)}
+                        disabled={submitting || !addForm.name.trim()}
+                        onClick={async () => {
+                            setSubmitting(true)
+                            try {
+                                await createCategory(addForm)
+                                toast.success('Kategori berhasil ditambahkan')
+                                setAddModal(false)
+                                resetAddForm()
+                                fetchCategories()
+                            } catch {
+                                toast.error('Gagal menambahkan kategori')
+                            } finally {
+                                setSubmitting(false)
+                            }
+                        }}
                     >
-                        Simpan
+                        {submitting ? 'Menyimpan...' : 'Simpan'}
                     </Button>
                 </div>
             </Modal>
@@ -409,9 +425,23 @@ function CategoryManagementPage() {
                     </Button>
                     <Button
                         variant="primary"
-                        onClick={() => setEditModal(null)}
+                        disabled={submitting || !editForm.name?.trim()}
+                        onClick={async () => {
+                            if (!editModal) return
+                            setSubmitting(true)
+                            try {
+                                await updateCategory(editModal.id, editForm)
+                                toast.success('Kategori berhasil diperbarui')
+                                setEditModal(null)
+                                fetchCategories()
+                            } catch {
+                                toast.error('Gagal memperbarui kategori')
+                            } finally {
+                                setSubmitting(false)
+                            }
+                        }}
                     >
-                        Simpan
+                        {submitting ? 'Menyimpan...' : 'Simpan'}
                     </Button>
                 </div>
             </Modal>
@@ -432,9 +462,23 @@ function CategoryManagementPage() {
                     </Button>
                     <Button
                         variant="danger"
-                        onClick={() => setDeleteModal(null)}
+                        disabled={submitting}
+                        onClick={async () => {
+                            if (!deleteModal) return
+                            setSubmitting(true)
+                            try {
+                                await deleteCategory(deleteModal)
+                                toast.success('Kategori berhasil dihapus')
+                                setDeleteModal(null)
+                                fetchCategories()
+                            } catch {
+                                toast.error('Gagal menghapus kategori')
+                            } finally {
+                                setSubmitting(false)
+                            }
+                        }}
                     >
-                        Hapus
+                        {submitting ? 'Menghapus...' : 'Hapus'}
                     </Button>
                 </div>
             </Modal>

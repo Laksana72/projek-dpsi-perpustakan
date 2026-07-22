@@ -15,6 +15,7 @@ return new class extends Migration
             $table->date('borrow_date');
             $table->date('due_date');
             $table->date('return_date')->nullable();
+            $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();
         });
     }

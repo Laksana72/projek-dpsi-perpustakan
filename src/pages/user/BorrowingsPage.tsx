@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BookOpen, Calendar, CheckCircle2, Wallet, Search, RotateCcw } from 'lucide-react'
-import { getBorrowingsByUserId } from '@/services/borrowing.service'
+import { getBorrowingsByUserId, extendBorrowing, returnBorrowing } from '@/services/borrowing.service'
+import { toast } from 'sonner'
 import { getAllBooks } from '@/services/book.service'
 import { useAuth } from '@/hooks/useAuth'
 import type { Borrowing, Book } from '@/types'
@@ -501,11 +502,37 @@ function BorrowingsPage() {
                 title={modal?.type === 'extend' ? 'Perpanjang Peminjaman' : 'Kembalikan Buku'}
                 size="sm"
             >
-                <p className="text-sm text-text-secondary">
+                <p className="mb-6 text-sm text-text-secondary">
                     {modal?.type === 'extend'
-                        ? 'Fitur perpanjangan peminjaman belum tersedia. Silakan hubungi petugas perpustakaan.'
-                        : 'Fitur pengembalian buku belum tersedia. Silakan hubungi petugas perpustakaan.'}
+                        ? 'Perpanjang masa peminjaman buku selama 7 hari?'
+                        : 'Kembalikan buku ini sekarang?'}
                 </p>
+                <div className="flex justify-end gap-3">
+                    <Button variant="outline" onClick={() => setModal(null)}>
+                        Batal
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={async () => {
+                            if (!modal) return
+                            try {
+                                if (modal.type === 'extend') {
+                                    await extendBorrowing(modal.id)
+                                    toast.success('Peminjaman berhasil diperpanjang 7 hari')
+                                } else {
+                                    await returnBorrowing(modal.id)
+                                    toast.success('Buku berhasil dikembalikan')
+                                }
+                                setModal(null)
+                                fetchBorrowings()
+                            } catch {
+                                toast.error('Gagal memproses. Coba lagi.')
+                            }
+                        }}
+                    >
+                        {modal?.type === 'extend' ? 'Perpanjang' : 'Kembalikan'}
+                    </Button>
+                </div>
             </Modal>
 
             <QRCodeModal

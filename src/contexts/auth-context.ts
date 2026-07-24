@@ -11,6 +11,7 @@ export interface AuthContextType {
     token: string | null
     login: (usernameOrEmail: string, password: string, role?: 'user' | 'pustakawan' | 'admin') => Promise<boolean>
     logout: () => void
+    setUser: (user: AuthUser) => void
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)

@@ -9,6 +9,9 @@ interface BookApiResponse {
 }
 
 function transformBook(item: Record<string, unknown>): Book {
+    const cover = (item.cover as string) ?? ''
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+    const baseUrl = apiBase.replace(/\/api$/, '')
     return {
         id: String(item.id),
         title: item.title as string,
@@ -18,7 +21,7 @@ function transformBook(item: Record<string, unknown>): Book {
         year: item.year as number,
         category: (item.category as Record<string, unknown>)?.name as string ?? '',
         description: (item.description as string) ?? '',
-        cover: (item.cover as string) ?? '',
+        cover: cover && !cover.startsWith('http') ? `${baseUrl}/storage/${cover}` : cover,
         status: item.status as Book['status'],
         pages: (item.pages as number) ?? 0,
         language: item.language as string | undefined,
@@ -70,4 +73,24 @@ export async function deleteBook(id: string | number): Promise<void> {
 export async function getCategories(): Promise<string[]> {
     const response = await api.get<{ data: { id: number; name: string }[] }>('/categories')
     return response.data.map((c) => c.name)
+}
+
+export async function uploadCover(bookId: string | number, file: File): Promise<{ cover: string; cover_url: string }> {
+    const formData = new FormData()
+    formData.append('cover', file)
+    formData.append('book_id', String(bookId))
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/upload/cover`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+    })
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({ message: 'Gagal upload' }))
+        throw new Error(err.message || 'Gagal upload')
+    }
+    return response.json()
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ExcelExportController;
 use App\Http\Controllers\Api\ExcelImportController;
+use App\Http\Controllers\Api\UploadController;
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -34,6 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->middleware('role:admin');
     Route::get('/dashboard/pustakawan', [DashboardController::class, 'pustakawan'])->middleware('role:admin,pustakawan');
     Route::get('/dashboard/user', [DashboardController::class, 'user']);
+
+    // Uploads
+    Route::post('/upload/avatar', [UploadController::class, 'avatar']);
+    Route::post('/upload/cover', [UploadController::class, 'cover']);
 
     // Books (protected mutations only) — admin & pustakawan
     Route::middleware('role:admin,pustakawan')->group(function () {

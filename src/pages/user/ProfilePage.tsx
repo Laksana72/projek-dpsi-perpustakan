@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCircle2, Clock, Wallet, Edit3, Lock, LogOut, Mail, Phone, MapPin, GraduationCap, Building, User, Hash, Calendar } from 'lucide-react'
+import { BookOpen, CheckCircle2, Clock, Wallet, Edit3, Lock, LogOut, Mail, Phone, MapPin, GraduationCap, Building, User, Hash, Calendar, Camera } from 'lucide-react'
 import { getProfile } from '@/services/profile.service'
 import { getAllBorrowings } from '@/services/borrowing.service'
-import { updateProfile, changePassword } from '@/services/auth.service'
+import { updateProfile, changePassword, uploadAvatar } from '@/services/auth.service'
+import { toast } from 'sonner'
 import { useAuth } from '@/hooks/useAuth'
 import type { Profile, Borrowing } from '@/types'
 import Avatar from '@/components/ui/Avatar'
@@ -23,7 +24,7 @@ const membershipBadge: Record<string, 'success' | 'danger'> = {
 
 function ProfilePage() {
     const navigate = useNavigate()
-    const { logout } = useAuth()
+    const { logout, setUser } = useAuth()
     const [profile, setProfile] = useState<Profile | null>(null)
     const [borrowings, setBorrowings] = useState<Borrowing[]>([])
     const [loading, setLoading] = useState(false)
@@ -166,12 +167,40 @@ function ProfilePage() {
                 <div className="lg:col-span-1">
                     <div className="rounded-[16px] bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-md">
                         <div className="mb-6 flex flex-col items-center text-center">
-                            <Avatar
-                                src={profile.user.avatar}
-                                name={profile.user.name}
-                                size="xl"
-                                className="mb-4"
-                            />
+                            <div className="relative mb-4">
+                                <Avatar
+                                    src={profile.user.avatar}
+                                    name={profile.user.name}
+                                    size="xl"
+                                />
+                                <button
+                                    onClick={() => document.getElementById('upload-avatar')?.click()}
+                                    className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white shadow-md transition-colors hover:bg-primary/90"
+                                    aria-label="Upload foto profil"
+                                >
+                                    <Camera className="h-4 w-4" />
+                                </button>
+                                <input
+                                    id="upload-avatar"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0]
+                                        if (!file) return
+                                        try {
+                                            await uploadAvatar(file)
+                                            toast.success('Foto profil berhasil diperbarui')
+                                            const refreshed = await getProfile()
+                                            setProfile(refreshed)
+                                            setUser(refreshed.user)
+                                        } catch {
+                                            toast.error('Gagal upload foto')
+                                        }
+                                        e.target.value = ''
+                                    }}
+                                />
+                            </div>
                             <h3 className="text-xl font-bold text-text-primary">{profile.user.name}</h3>
                             <Badge variant="primary" size="sm" className="mt-1">
                                 {profile.membership.id}

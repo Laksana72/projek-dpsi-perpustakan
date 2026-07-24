@@ -24,7 +24,7 @@ export interface User {
     nim: string
     programStudi: string
     avatar: string
-    role: 'user' | 'admin'
+    role: 'user' | 'pustakawan' | 'admin'
     membershipStatus: string
     membershipExpiry: string
 }

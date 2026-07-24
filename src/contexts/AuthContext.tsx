@@ -70,6 +70,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 token,
                 login,
                 logout,
+                setUser,
             }}
         >
             {children}

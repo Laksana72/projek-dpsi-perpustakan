@@ -10,7 +10,7 @@ import {
     RotateCcw,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { getAllBooks, createBook, updateBook, deleteBook } from '@/services/book.service'
+import { getAllBooks, createBook, updateBook, deleteBook, uploadCover } from '@/services/book.service'
 import { getAllCategories } from '@/services/category.service'
 import type { Book } from '@/types'
 import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
@@ -74,6 +74,8 @@ function BookManagementPage() {
     const [editModal, setEditModal] = useState<Book | null>(null)
     const [deleteModal, setDeleteModal] = useState<Book | null>(null)
     const [formData, setFormData] = useState<Omit<Book, 'id'>>({ ...emptyBook })
+    const [coverFile, setCoverFile] = useState<File | null>(null)
+    const [editCoverPreview, setEditCoverPreview] = useState('')
 
     useEffect(() => {
         setError(false)
@@ -191,8 +193,12 @@ function BookManagementPage() {
 
     const handleAddBook = async () => {
         try {
-            await createBook(formData)
+            const book = await createBook(formData)
+            if (coverFile) {
+                await uploadCover(book.id, coverFile)
+            }
             setAddModal(false)
+            setCoverFile(null)
             const booksData = await getAllBooks()
             setBooks(booksData)
             toast.success('Buku berhasil ditambahkan')
@@ -205,7 +211,12 @@ function BookManagementPage() {
         if (!editModal) return
         try {
             await updateBook(editModal.id, formData)
+            if (coverFile) {
+                await uploadCover(editModal.id, coverFile)
+            }
             setEditModal(null)
+            setCoverFile(null)
+            setEditCoverPreview('')
             const booksData = await getAllBooks()
             setBooks(booksData)
             toast.success('Buku berhasil diperbarui')
@@ -661,11 +672,31 @@ function BookManagementPage() {
                         value={formData.callNumber || ''}
                         onChange={(e) => setFormData({ ...formData, callNumber: e.target.value })}
                     />
-                    <Input
-                        label="URL Cover"
-                        value={formData.cover}
-                        onChange={(e) => setFormData({ ...formData, cover: e.target.value })}
-                    />
+                    <div>
+                        <label className="mb-1 block text-sm font-medium text-text-primary">Cover Buku</label>
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                id="cover-add"
+                                className="hidden"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0]
+                                    if (file) setCoverFile(file)
+                                }}
+                            />
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => document.getElementById('cover-add')?.click()}
+                            >
+                                Pilih File
+                            </Button>
+                            <span className="text-sm text-text-secondary">
+                                {coverFile ? coverFile.name : 'Belum ada cover'}
+                            </span>
+                        </div>
+                    </div>
                     <Select
                         label="Status"
                         options={[
@@ -762,11 +793,37 @@ function BookManagementPage() {
                         value={formData.callNumber || ''}
                         onChange={(e) => setFormData({ ...formData, callNumber: e.target.value })}
                     />
-                    <Input
-                        label="URL Cover"
-                        value={formData.cover}
-                        onChange={(e) => setFormData({ ...formData, cover: e.target.value })}
-                    />
+                    <div>
+                        <label className="mb-1 block text-sm font-medium text-text-primary">Cover Buku</label>
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                id="cover-edit"
+                                className="hidden"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0]
+                                    if (file) {
+                                        setCoverFile(file)
+                                        setEditCoverPreview(URL.createObjectURL(file))
+                                    }
+                                }}
+                            />
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => document.getElementById('cover-edit')?.click()}
+                            >
+                                Pilih File
+                            </Button>
+                            <span className="text-sm text-text-secondary">
+                                {coverFile ? coverFile.name : formData.cover ? 'Cover sudah ada' : 'Belum ada cover'}
+                            </span>
+                        </div>
+                        {editCoverPreview && (
+                            <img src={editCoverPreview} alt="Preview" className="mt-2 h-24 w-20 rounded-lg object-cover" />
+                        )}
+                    </div>
                     <Select
                         label="Status"
                         options={[

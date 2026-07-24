@@ -20,6 +20,7 @@ import StatCard from '@/components/cards/StatCard'
 import Badge from '@/components/ui/Badge'
 import Skeleton from '@/components/feedback/Skeleton'
 import ErrorState from '@/components/feedback/ErrorState'
+import { exportBooks, exportBorrowings, exportReturns, exportFines } from '@/services/excel.service'
 
 function ReportPage() {
     const [books, setBooks] = useState<Book[]>([])
@@ -139,11 +140,19 @@ function ReportPage() {
 
     return (
         <div className="animate-fade-in">
-            <div className="mb-6">
-                <h2 className="mb-1 text-2xl font-bold text-text-primary">Laporan Perpustakaan</h2>
-                <p className="text-text-secondary">
-                    Ringkasan data dan statistik perpustakaan.
-                </p>
+            <div className="mb-6 flex items-center justify-between">
+                <div>
+                    <h2 className="mb-1 text-2xl font-bold text-text-primary">Laporan Perpustakaan</h2>
+                    <p className="text-text-secondary">
+                        Ringkasan data dan statistik perpustakaan.
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={exportBooks}>Export Buku</Button>
+                    <Button variant="outline" size="sm" onClick={exportBorrowings}>Export Peminjaman</Button>
+                    <Button variant="outline" size="sm" onClick={exportReturns}>Export Pengembalian</Button>
+                    <Button variant="outline" size="sm" onClick={exportFines}>Export Denda</Button>
+                </div>
             </div>
 
             <div className="mb-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

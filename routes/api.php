@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\ReturnController;
 use App\Http\Controllers\Api\FineController;
 use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\ExcelExportController;
+use App\Http\Controllers\Api\ExcelImportController;
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -60,6 +62,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // Members (admin only)
     Route::middleware('admin')->group(function () {
         Route::apiResource('members', MemberController::class);
+        Route::get('/export/books', [ExcelExportController::class, 'books']);
+        Route::get('/export/members', [ExcelExportController::class, 'members']);
+        Route::get('/export/borrowings', [ExcelExportController::class, 'borrowings']);
+        Route::get('/export/returns', [ExcelExportController::class, 'returns']);
+        Route::get('/export/fines', [ExcelExportController::class, 'fines']);
+        Route::post('/import/books', [ExcelImportController::class, 'books']);
+        Route::post('/import/members', [ExcelImportController::class, 'members']);
     });
 
     // Borrowings

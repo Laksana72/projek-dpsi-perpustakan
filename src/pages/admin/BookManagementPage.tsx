@@ -25,6 +25,7 @@ import Modal from '@/components/feedback/Modal'
 import Skeleton from '@/components/feedback/Skeleton'
 import EmptyState from '@/components/feedback/EmptyState'
 import ErrorState from '@/components/feedback/ErrorState'
+import { exportBooks, importBooks } from '@/services/excel.service'
 
 const ITEMS_PER_PAGE = 10
 
@@ -267,14 +268,49 @@ function BookManagementPage() {
                     <h2 className="mb-1 text-2xl font-bold text-text-primary">Manajemen Buku</h2>
                     <p className="text-text-secondary">Kelola koleksi buku perpustakaan.</p>
                 </div>
-                <Button
-                    variant="primary"
-                    size="md"
-                    leftIcon={<Plus className="h-4 w-4" />}
-                    onClick={openAddModal}
-                >
-                    Tambah Buku
-                </Button>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="md"
+                        onClick={() => document.getElementById('import-books')?.click()}
+                    >
+                        Import Excel
+                    </Button>
+                    <input
+                        id="import-books"
+                        type="file"
+                        accept=".xlsx,.xls"
+                        className="hidden"
+                        onChange={async (e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            try {
+                                const result = await importBooks(file)
+                                toast.success(result.message)
+                                fetchBooks()
+                            } catch (err) {
+                                toast.error(err instanceof Error ? err.message : 'Gagal mengimpor')
+                            }
+                            e.target.value = ''
+                        }}
+                    />
+                    <Button
+                        variant="primary"
+                        size="md"
+                        onClick={exportBooks}
+                        leftIcon={<BookOpen className="h-4 w-4" />}
+                    >
+                        Export Excel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="md"
+                        leftIcon={<Plus className="h-4 w-4" />}
+                        onClick={openAddModal}
+                    >
+                        Tambah Buku
+                    </Button>
+                </div>
             </div>
 
             <div className="mb-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

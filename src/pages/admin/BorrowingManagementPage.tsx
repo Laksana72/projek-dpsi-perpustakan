@@ -13,6 +13,8 @@ import { getAllBorrowings, approveBorrowing, rejectBorrowing } from '@/services/
 import type { Borrowing } from '@/types'
 import BookCoverPlaceholder from '@/components/ui/BookCoverPlaceholder'
 import StatCard from '@/components/cards/StatCard'
+import { toast } from 'sonner'
+import { exportBorrowings } from '@/services/excel.service'
 import Select from '@/components/forms/Select'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
@@ -229,8 +231,8 @@ function BorrowingManagementPage() {
                 />
             </div>
 
-            <div className="mb-4">
-                <div className="relative max-w-xl">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="relative max-w-xl flex-1">
                     <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-disabled" />
                     <input
                         type="text"
@@ -244,6 +246,13 @@ function BorrowingManagementPage() {
                         className="h-12 w-full rounded-[12px] border border-border bg-white pl-12 pr-4 text-base text-text-primary placeholder:text-disabled transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                 </div>
+                <Button
+                    variant="primary"
+                    size="md"
+                    onClick={exportBorrowings}
+                >
+                    Export Excel
+                </Button>
             </div>
 
             <div className="mb-6 flex flex-wrap items-end gap-3">

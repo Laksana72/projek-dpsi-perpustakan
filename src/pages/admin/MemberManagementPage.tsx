@@ -24,6 +24,7 @@ import Modal from '@/components/feedback/Modal'
 import Skeleton from '@/components/feedback/Skeleton'
 import EmptyState from '@/components/feedback/EmptyState'
 import ErrorState from '@/components/feedback/ErrorState'
+import { exportMembers, importMembers } from '@/services/excel.service'
 
 const ITEMS_PER_PAGE = 10
 
@@ -232,8 +233,8 @@ function MemberManagementPage() {
                 />
             </div>
 
-            <div className="mb-4">
-                <div className="relative max-w-xl">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="relative max-w-xl flex-1">
                     <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-disabled" />
                     <input
                         type="text"
@@ -246,6 +247,40 @@ function MemberManagementPage() {
                         aria-label="Cari anggota"
                         className="h-12 w-full rounded-[12px] border border-border bg-white pl-12 pr-4 text-base text-text-primary placeholder:text-disabled transition-all duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
+                </div>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="md"
+                        onClick={() => document.getElementById('import-members')?.click()}
+                    >
+                        Import Excel
+                    </Button>
+                    <input
+                        id="import-members"
+                        type="file"
+                        accept=".xlsx,.xls"
+                        className="hidden"
+                        onChange={async (e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            try {
+                                const result = await importMembers(file)
+                                toast.success(result.message)
+                                fetchData()
+                            } catch (err) {
+                                toast.error(err instanceof Error ? err.message : 'Gagal mengimpor')
+                            }
+                            e.target.value = ''
+                        }}
+                    />
+                    <Button
+                        variant="primary"
+                        size="md"
+                        onClick={exportMembers}
+                    >
+                        Export Excel
+                    </Button>
                 </div>
             </div>
 

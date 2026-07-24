@@ -15,7 +15,8 @@ class AuthenticateFromQuery
             $request->headers->set('Authorization', 'Bearer ' . $token);
             $accessToken = PersonalAccessToken::findToken($token);
             if ($accessToken) {
-                $request->setUserResolver(fn () => $accessToken->tokenable);
+                $user = $accessToken->tokenable;
+                $request->setUserResolver(fn () => $user);
             }
         }
 

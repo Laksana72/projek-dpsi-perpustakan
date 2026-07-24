@@ -15,6 +15,10 @@ use App\Http\Controllers\Api\ExcelExportController;
 use App\Http\Controllers\Api\ExcelImportController;
 use App\Http\Controllers\Api\UploadController;
 
+Route::get('/login', function () {
+    return response()->json(['message' => 'Unauthenticated'], 401);
+})->name('login');
+
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -87,7 +91,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Export routes (admin only, uses window.open with ?token=)
-Route::middleware(['auth.query', 'auth:sanctum', 'admin'])->group(function () {
+Route::middleware(['auth.query', 'admin'])->group(function () {
     Route::get('/export/books', [ExcelExportController::class, 'books']);
     Route::get('/export/members', [ExcelExportController::class, 'members']);
     Route::get('/export/borrowings', [ExcelExportController::class, 'borrowings']);

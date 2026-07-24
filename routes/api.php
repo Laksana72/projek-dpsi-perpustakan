@@ -67,13 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Members (admin only)
     Route::middleware('admin')->group(function () {
         Route::apiResource('members', MemberController::class);
-        Route::get('/export/books', [ExcelExportController::class, 'books']);
-        Route::get('/export/members', [ExcelExportController::class, 'members']);
-        Route::get('/export/borrowings', [ExcelExportController::class, 'borrowings']);
-        Route::get('/export/returns', [ExcelExportController::class, 'returns']);
-        Route::get('/export/fines', [ExcelExportController::class, 'fines']);
-        Route::post('/import/books', [ExcelImportController::class, 'books']);
-        Route::post('/import/members', [ExcelImportController::class, 'members']);
     });
 
     // Borrowings
@@ -91,4 +84,19 @@ Route::middleware('auth:sanctum')->group(function () {
     // History
     Route::get('/history/user/{user}', [HistoryController::class, 'userHistory']);
     Route::apiResource('history', HistoryController::class)->only(['index', 'show']);
+});
+
+// Export routes (admin only, uses window.open with ?token=)
+Route::middleware(['auth.query', 'auth:sanctum', 'admin'])->group(function () {
+    Route::get('/export/books', [ExcelExportController::class, 'books']);
+    Route::get('/export/members', [ExcelExportController::class, 'members']);
+    Route::get('/export/borrowings', [ExcelExportController::class, 'borrowings']);
+    Route::get('/export/returns', [ExcelExportController::class, 'returns']);
+    Route::get('/export/fines', [ExcelExportController::class, 'fines']);
+});
+
+// Import routes (admin only, uses normal auth)
+Route::middleware(['auth.query', 'auth:sanctum', 'admin'])->group(function () {
+    Route::post('/import/books', [ExcelImportController::class, 'books']);
+    Route::post('/import/members', [ExcelImportController::class, 'members']);
 });

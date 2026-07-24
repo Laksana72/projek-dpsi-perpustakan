@@ -14,16 +14,6 @@ use Illuminate\Http\Request;
 
 class ExcelExportController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            if ($token = $request->query('token')) {
-                $request->headers->set('Authorization', 'Bearer ' . $token);
-            }
-            return $next($request);
-        })->only(['books', 'members', 'borrowings', 'returns', 'fines']);
-    }
-
     public function books()
     {
         $books = Book::with(['category', 'publisher'])->latest()->get();
